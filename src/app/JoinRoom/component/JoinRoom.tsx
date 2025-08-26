@@ -22,8 +22,7 @@ export default function JoinRoom() {
 
       // const serverRoomCode = data.roomCode;
 
-      setIsConnecting(false);
-      // router.push(`/lobby?roomCode=${data.roomCode}&playerName=${nickname}`);
+      setIsConnecting(false); 
       window.location.href = `/lobby?roomCode=${data.roomCode}&playerName=${nickname}`;
     });
 
