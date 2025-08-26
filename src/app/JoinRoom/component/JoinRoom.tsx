@@ -20,7 +20,7 @@ export default function JoinRoom() {
     socket.on("roomData", (data) => {
       console.log("Room data:", data);
 
-      // const serverRoomCode = data.roomCode;
+
 
       setIsConnecting(false); 
       window.location.href = `/lobby?roomCode=${data.roomCode}&playerName=${nickname}`;
