@@ -15,20 +15,18 @@ export default function JoinRoom() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // Socket холболт үүсгэх нэг удаа
     socket = io("http://localhost:4200");
 
-    // Room data update
     socket.on("roomData", (data) => {
       console.log("Room data:", data);
-      // Амжилттай join хийсэн бол lobby руу шилжих
-      if (isConnecting) {
-        setIsConnecting(false);
-        router.push(`/lobby?roomId=${data.roomCode}&playerName=${nickname}`);
-      }
+
+      // const serverRoomCode = data.roomCode;
+
+      setIsConnecting(false);
+      // router.push(`/lobby?roomCode=${data.roomCode}&playerName=${nickname}`);
+      window.location.href = `/lobby?roomCode=${data.roomCode}&playerName=${nickname}`;
     });
 
-    // Join алдаа
     socket.on("joinError", ({ message }) => {
       setErrorMessage(message);
       setIsConnecting(false);
@@ -41,9 +39,11 @@ export default function JoinRoom() {
     });
 
     return () => {
-      socket.disconnect();
+      if (socket) {
+        socket.disconnect();
+      }
     };
-  }, [router, nickname, isConnecting]);
+  }, [router, nickname]);
 
   const handleJoinRoom = () => {
     if (!roomCode || !nickname) {
@@ -54,7 +54,6 @@ export default function JoinRoom() {
     setErrorMessage("");
     setIsConnecting(true);
 
-    // Өрөөнд join хийх
     socket.emit("joinRoom", { roomCode, playerName: nickname });
   };
 
