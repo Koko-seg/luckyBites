@@ -45,15 +45,13 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
         });
       }
 
-      // router.push(`/lobby?roomId=${data.roomId}&roomCode=${data.roomCode}`);
-      // ...
-      // router.push(`/lobby?roomId=${data.roomId}&roomCode=${data.roomCode}`);
-
-      router.push(
+  
+     router.push(
         `/lobby?roomId=${data.roomId}&roomCode=${data.roomCode}&playerName=${hostNickname}`
       );
     } catch (err: any) {
-      setErrorMessage(err.message || "Алдаа гарлаа");
+      const message = err.message || err;
+      setErrorMessage(typeof message === 'object' ? JSON.stringify(message) : message);
     } finally {
       setIsLoading(false);
     }
