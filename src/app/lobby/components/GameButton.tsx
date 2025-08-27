@@ -40,17 +40,24 @@ export const GameButton: React.FC<GameButtonProps> = ({
   const handleGameSelect = () => {
     if (!isHost || !socket) return;
 
-    socket.emit("host:select_game", { roomId: roomCode, gameType: game.id });
+    socket.emit("host:select_game", { roomCode: roomCode, gameType: game.id });
 
     // Host өөрөө game page руу явна
     router.push(`/games/${game.id}?roomCode=${roomCode}&nickname=${playerName}`);
+    // Host өөрөө game page руу явна
+// window.location.href = `/games/${game.id}?roomCode=${roomCode}&nickname=${playerName}`;
+// router.push(`/games/excuse?roomCode=${roomCode}&nickname=${playerName}`);
+
   };
 
   // ✅ Game эхлүүлэх товч
   const handleGameStart = () => {
     if (!isHost || !canStart || !socket || !isSelected) return;
 
-    socket.emit("host:start_game", { roomId: roomCode });
+    socket.emit("host:start_game", { roomCode: roomCode });
+    console.log("Emit host:select_game", roomCode, game.id);
+if (!roomCode) return console.error("roomCode undefined!");
+
   };
 
   // Button style

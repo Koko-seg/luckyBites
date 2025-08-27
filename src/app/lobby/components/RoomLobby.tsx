@@ -7,6 +7,7 @@ import { RoomInfoCard } from "./RoomInfoCard";
 import { RoomContext } from "@/context/roomContextTest";
 import ExcuseCard from "@/app/(games)/excuse/components/ExcuseCard";
 import { GameButton } from "./GameButton";
+import RaceGame from "@/app/(games)/runnerGame/page";
 
 export const RoomLobby = () => {
 
@@ -39,7 +40,7 @@ export const RoomLobby = () => {
     {
       id: "runnerGame",
       name: "Уралдая",
-      component: ExcuseCard,
+      component: RaceGame,
       description: "Жижиг тайлбар.",
       icon: LogOut,
       color: "bg-blue-400",

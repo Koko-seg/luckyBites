@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+"use client";
+
+import React, { useEffect, useState, useRef } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import io, { Socket } from "socket.io-client";
 import { GameStatus } from "@/types/types";
 
@@ -7,30 +9,28 @@ type RoomData = {
   roomCode: string;
   host: string | null;
   players: string[];
-  roomName: string;
-  playerName: string | null;
-  socket: Socket | null;
+  roomName?: string;
   selectedGame: string | null;
-  gameStatus: GameStatus;
+  gameStatus?: GameStatus;
   currentGame: string | null;
-  gametype: string | null;
-}
+  gameType: string | null;
+};
 
 interface RoomDataContext {
-  roomData: RoomData | null,
+  roomData: RoomData | null;
   socket: Socket | null;
   playerName: string | null;
 }
-let socket: Socket;
 
 export const RoomContext = React.createContext<RoomDataContext | null>(null);
 
-export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const searchParams = useSearchParams();
   const roomCode = searchParams.get("roomCode");
   const playerName = searchParams.get("playerName");
+  const router = useRouter();
+
+  const socketRef = useRef<Socket | null>(null);
 
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,53 +43,52 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    // Connect to the socket server only once when the component mounts
-    socket = io("http://localhost:4200");
+    if (!socketRef.current) {
+      socketRef.current = io("http://localhost:4200");
+    }
+    const socket = socketRef.current;
 
-    // Add event listeners
+    // Room data update
     const handleRoomData = (data: RoomData) => {
       if (data.roomCode !== roomCode) return;
       setRoomData(data);
       setLoading(false);
-      setErrorMessage(""); // Clear any previous errors
+      setErrorMessage("");
+
+      // Redirect logic: хэрэв тоглоом сонгогдсон бол шууд game page рүү оруулах
+      if (data.selectedGame) {
+        router.push(`/games/${data.selectedGame}?roomCode=${roomCode}&nickname=${playerName}`);
+      }
     };
 
+    // Error
     const handleJoinError = ({ message }: { message: any }) => {
-      const errorText =
-        typeof message === "object" ? JSON.stringify(message) : message;
-      setErrorMessage(errorText);
+      setErrorMessage(typeof message === "object" ? JSON.stringify(message) : message);
       setLoading(false);
     };
 
     socket.on("roomData", handleRoomData);
     socket.on("joinError", handleJoinError);
 
-    // Emit the joinRoom event
+    // Join room
     socket.emit("joinRoom", { roomCode, playerName });
 
-    // Clean-up function
+    // Cleanup
     return () => {
       socket.off("roomData", handleRoomData);
       socket.off("joinError", handleJoinError);
       socket.disconnect();
+      socketRef.current = null;
     };
-  }, [roomCode, playerName]);
+  }, [roomCode, playerName, router]);
 
-  if (loading) {
-    return <div>Лобби ачааллаж байна...</div>;
-  }
-
-  if (errorMessage) {
-    return <div>Алдаа гарлаа: {errorMessage}</div>;
-  }
-
-  // Use a different check for player count if the room exists but has no players
-  if (roomData && roomData.players.length === 0) {
-    return <div>no player</div>;
-  }
-
+  if (loading) return <div>Лобби ачааллаж байна...</div>;
+  if (errorMessage) return <div>Алдаа гарлаа: {errorMessage}</div>;
+  if (roomData && roomData.players.length === 0) return <div>no player</div>;
 
   return (
-    <RoomContext.Provider value={{ socket, roomData, playerName }}>{children}</RoomContext.Provider>
+    <RoomContext.Provider value={{ socket: socketRef.current, roomData, playerName }}>
+      {children}
+    </RoomContext.Provider>
   );
 };

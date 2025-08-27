@@ -1,14 +1,21 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ExcuseBackground } from "./components/ExcuseBackground";
 import { ExcuseHeader } from "./components/ExcuseHeader";
 import { ExcuseForm } from "./components/ExcuseForm";
 import { AnimatedDotAll } from "@/components/AnimatedDot";
+import { RoomContext } from "@/context/roomContextTest";
 
 export const ExcuseSection: React.FC = () => {
   const [submitted] = useState<boolean>(false);
+
+    const data = useContext(RoomContext);
+   const { roomData } = data || {};
+   if (!roomData) {
+     return <div>Лобби ачааллаж байна...</div>;
+   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
