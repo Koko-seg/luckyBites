@@ -35,12 +35,14 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
       setLoading(false);
       return;
     }
-
+     console.log("roomCode:", roomCode);
+  console.log("playerName:", playerName);
     // Connect to the socket server only once when the component mounts
     socket = io("http://localhost:4200");
 
     // Add event listeners
     const handleRoomData = (data: RoomDataContext) => {
+        console.log("📡 roomData received:", data);
       if (data.roomCode !== roomCode) return;
       setRoomData(data);
       setLoading(false);
