@@ -85,7 +85,7 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({ children
   if (loading) return <div>Лобби ачааллаж байна...</div>;
   if (errorMessage) return <div>Алдаа гарлаа: {errorMessage}</div>;
   if (roomData && roomData.players.length === 0) return <div>no player</div>;
-
+  if (!socketRef.current) return <div>Socket холболт үүссэнгүй.</div>;
   return (
     <RoomContext.Provider value={{ socket: socketRef.current, roomData, playerName }}>
       {children}

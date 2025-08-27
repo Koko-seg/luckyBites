@@ -1,15 +1,16 @@
 // app/(games)/runnerGame/page.tsx
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
 import { RoomContext } from "@/context/roomContextTest";
+import React, { useContext, useEffect, useState } from "react";
+
 
 const RunnerGame: React.FC = () => {
-  const { socket, roomData, playerName } = useContext(RoomContext) || {};
-
+  const data = useContext(RoomContext);
+  const { roomData, socket, playerName } = data || {};
+console.log(data)
   const [gameStarted, setGameStarted] = useState(false);
   const [playersPositions, setPlayersPositions] = useState<Record<string, number>>({});
-
   if (!socket || !roomData || !playerName) {
     return <div>Лобби ачааллаж байна...</div>;
   }
@@ -46,7 +47,7 @@ const RunnerGame: React.FC = () => {
   const moveForward = () => {
     if (!roomData) return;
     const currentPos = playersPositions[playerName!] || 0;
-    const newPos = Math.min(currentPos + 10, 100); // % хэлбэрээр
+    const newPos = Math.min(currentPos + 3, 100); // % хэлбэрээр
     const updatedPositions = { ...playersPositions, [playerName!]: newPos };
     setPlayersPositions(updatedPositions);
 

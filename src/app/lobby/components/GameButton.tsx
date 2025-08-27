@@ -36,29 +36,29 @@ export const GameButton: React.FC<GameButtonProps> = ({
   const isSelected = selectedGame === game.id;
   const IconComponent = game.icon;
 
-  // ✅ Game сонгох товч
+  
   const handleGameSelect = () => {
     if (!isHost || !socket) return;
 
-    socket.emit("host:select_game", { roomCode: roomCode, gameType: game.id });
+    socket.emit("host:select_game", { roomCode, gameType: game.id });
 
     // Host өөрөө game page руу явна
     router.push(`/games/${game.id}?roomCode=${roomCode}&nickname=${playerName}`);
-    // Host өөрөө game page руу явна
-// window.location.href = `/games/${game.id}?roomCode=${roomCode}&nickname=${playerName}`;
-// router.push(`/games/excuse?roomCode=${roomCode}&nickname=${playerName}`);
+  
 
   };
 
   // ✅ Game эхлүүлэх товч
-  const handleGameStart = () => {
-    if (!isHost || !canStart || !socket || !isSelected) return;
+ const handleGameStart = () => {
+  if (!isHost || !canStart || !socket || !isSelected) return;
 
-    socket.emit("host:start_game", { roomCode: roomCode });
-    console.log("Emit host:select_game", roomCode, game.id);
-if (!roomCode) return console.error("roomCode undefined!");
+  // бүх тоглогчид руу "game_started" event явуулна
+  socket.emit("host:start_game", { roomCode, gameType: game.id });
+  console.log("Emit host:start_game", roomCode, game.id);
 
-  };
+  // Host өөрөө ч бас шууд game руу орно
+  router.push(`/games/${game.id}?roomCode=${roomCode}&nickname=${playerName}`);
+};
 
   // Button style
   const buttonClasses = isSelected
