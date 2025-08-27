@@ -3,6 +3,7 @@
 
 import React, { useContext } from "react";
 import { RoomContext } from "@/context/roomContextTest";
+import { useRouter } from "next/navigation";
 
 interface GameProps {
   id: string;
@@ -24,44 +25,43 @@ export const GameButton: React.FC<GameButtonProps> = ({
   canStart,
   selectedGame,
 }) => {
-  const roomData = useContext(RoomContext);
+  const data = useContext(RoomContext);
+  const router = useRouter();
 
-  if (!roomData) {
-    return null;
-  }
+  if (!data?.roomData || !data.playerName || !data.socket) return null;
 
-  const { host, playerName, roomCode, socket } = roomData;
-  const isHost = host === playerName;
-  const IconComponent = game.icon;
+  const { roomData, playerName, socket } = data;
+  const { roomCode, players } = roomData;
+  const isHost = playerName === players[0];
   const isSelected = selectedGame === game.id;
-  console.log("-------------------");
-  console.log("Game ID:", game.id);
-  console.log("Is Host:", isHost);
-  console.log("Can Start:", canStart);
-  console.log("Is Selected:", isSelected);
-  console.log("Current selected game in context:", selectedGame);
-  console.log("Players count:", roomData.players.length);
-  console.log("-------------------");
+  const IconComponent = game.icon;
 
+  // ✅ Game сонгох товч
   const handleGameSelect = () => {
-    if (!isHost || !canStart || !socket) return;
+    if (!isHost || !socket) return;
+
     socket.emit("host:select_game", { roomId: roomCode, gameType: game.id });
+
+    // Host өөрөө game page руу явна
+    router.push(`/games/${game.id}?roomCode=${roomCode}&nickname=${playerName}`);
   };
 
+  // ✅ Game эхлүүлэх товч
   const handleGameStart = () => {
     if (!isHost || !canStart || !socket || !isSelected) return;
+
     socket.emit("host:start_game", { roomId: roomCode });
   };
 
+  // Button style
   const buttonClasses = isSelected
     ? `${game.color} ${game.textColor} ring-4 ring-white ring-opacity-60`
     : `${game.color} ${game.textColor}`;
 
+  // Player view (host биш)
   if (!isHost) {
     return (
-      <div
-        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 opacity-60`}
-      >
+      <div className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 opacity-60`}>
         <div className="flex flex-col items-center text-center">
           <div className="mb-4 p-4 bg-white/30 rounded-2xl">
             <IconComponent size={48} className="mx-auto" />
@@ -78,11 +78,11 @@ export const GameButton: React.FC<GameButtonProps> = ({
     );
   }
 
+  // Host view
   return (
     <div className="flex flex-col gap-2">
       <button
         onClick={handleGameSelect}
-        disabled={!canStart}
         className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
           !canStart ? "opacity-50 cursor-not-allowed" : ""
         }`}
@@ -101,6 +101,7 @@ export const GameButton: React.FC<GameButtonProps> = ({
         </div>
       </button>
 
+      {/* Game эхлүүлэх товч зөвхөн сонгогдсон game-д */}
       {isSelected && canStart && (
         <button
           onClick={handleGameStart}

@@ -5,12 +5,13 @@ import { useContext } from "react";
 import { PlayerCardGeneral } from "./PlayerCardGeneral";
 import { RoomInfoCard } from "./RoomInfoCard";
 import { RoomContext } from "@/context/roomContextTest";
-import ExcuseSection from "@/app/(games)/excuse/page";
 import ExcuseCard from "@/app/(games)/excuse/components/ExcuseCard";
 import { GameButton } from "./GameButton";
 
 export const RoomLobby = () => {
-  const roomData = useContext(RoomContext);
+
+  const  data  = useContext(RoomContext);
+  const { roomData } = data || {};
 
   if (!roomData) {
     return <div>Лобби ачааллаж байна...</div>;
@@ -36,7 +37,7 @@ export const RoomLobby = () => {
       textColor: "text-blue-900",
     },
     {
-      id: "runner",
+      id: "runnerGame",
       name: "Уралдая",
       component: ExcuseCard,
       description: "Жижиг тайлбар.",
@@ -54,10 +55,10 @@ export const RoomLobby = () => {
       textColor: "text-blue-900",
     },
   ];
+
   console.log(roomData);
   const canStart = roomData.players.length >= 2;
   const selectedGame = roomData.selectedGame;
-
   // roomData dotorh "gameState" baidliig shalgana
   if (roomData.gameStatus === "STARTED") {
     // Togloom ehleegui baisan ch, ehlehiig zaaj ogoh heregtei.
@@ -73,6 +74,7 @@ export const RoomLobby = () => {
   }
 
   return (
+
     <div className="min-h-screen bg-gradient-to-b from-sky-300 via-sky-200 to-blue-70 p-4">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">

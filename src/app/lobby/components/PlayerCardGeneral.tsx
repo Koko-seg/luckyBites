@@ -10,8 +10,8 @@ export const PlayerCardGeneral = () => {
 
   const playerName = searchParams.get("playerName");
 
-  const roomData = useContext(RoomContext);
-
+  const data = useContext(RoomContext);
+ const { roomData } = data || {};
   const players: Player[] =
     roomData?.players?.map((name, index) => ({
       id: index,

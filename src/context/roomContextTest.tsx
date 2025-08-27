@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import io, { Socket } from "socket.io-client";
 import { GameStatus } from "@/types/types";
 
-interface RoomDataContext {
+type RoomData = {
   roomCode: string;
   host: string | null;
   players: string[];
@@ -13,6 +13,13 @@ interface RoomDataContext {
   selectedGame: string | null;
   gameStatus: GameStatus;
   currentGame: string | null;
+  gametype: string | null;
+}
+
+interface RoomDataContext {
+  roomData: RoomData | null,
+  socket: Socket | null;
+  playerName: string | null;
 }
 let socket: Socket;
 
@@ -25,7 +32,7 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
   const roomCode = searchParams.get("roomCode");
   const playerName = searchParams.get("playerName");
 
-  const [roomData, setRoomData] = useState<RoomDataContext | null>(null);
+  const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -40,7 +47,7 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
     socket = io("http://localhost:4200");
 
     // Add event listeners
-    const handleRoomData = (data: RoomDataContext) => {
+    const handleRoomData = (data: RoomData) => {
       if (data.roomCode !== roomCode) return;
       setRoomData(data);
       setLoading(false);
@@ -81,7 +88,8 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
     return <div>no player</div>;
   }
 
+
   return (
-    <RoomContext.Provider value={roomData}>{children}</RoomContext.Provider>
+    <RoomContext.Provider value={{ socket, roomData, playerName }}>{children}</RoomContext.Provider>
   );
 };
