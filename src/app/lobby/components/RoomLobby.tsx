@@ -1,82 +1,79 @@
-import { ArrowLeft, LogOut, Users } from "lucide-react"
-import { PlayerCard } from "./PlayerCard"
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import io, { Socket } from "socket.io-client";
-import { Player } from "@/types/types";
+import { ArrowLeft, LogOut } from "lucide-react";
+
+import { useContext } from "react";
+
 import { PlayerCardGeneral } from "./PlayerCardGeneral";
 import { RoomInfoCard } from "./RoomInfoCard";
+import { RoomContext } from "@/context/roomContextTest";
+import ExcuseSection from "@/app/(games)/excuse/page";
+import ExcuseCard from "@/app/(games)/excuse/components/ExcuseCard";
+import { GameButton } from "./GameButton";
 
-interface RoomData {
-  roomCode: string;
-  host: string | null;
-  players: string[];
-  roomName:string
-}
-let socket: Socket;
-export const RoomLobby =()=> {
+export const RoomLobby = () => {
+  const roomData = useContext(RoomContext);
 
-    const searchParams = useSearchParams();
-  const roomCode = searchParams.get("roomCode");
-  const playerName = searchParams.get("playerName"); // Get player's nickname from URL
-
-  const [roomData, setRoomData] = useState<RoomData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
-
-
-
-  useEffect(() => {
-    // Check if required parameters exist
-    if (!roomCode || !playerName) {
-      setErrorMessage("Өрөөний код эсвэл тоглогчийн нэр олдсонгүй.");
-      setLoading(false);
-      return;
-    }
-
-    // Connect to the socket server
-   socket = io("http://localhost:4200");
-
-    // Listen for room data updates from the server
-    socket.on("roomData", (data: RoomData) => {
-      if (data.roomCode !== roomCode) return;
-      // The line below was causing the issue and has been removed.
-      // if (!data.players.length) return; 
-
-      setRoomData(data);
-      setLoading(false);
-    });
-
-    // Listen for join errors
-    socket.on("joinError", ({ message }) => {
-      const errorText = typeof message === 'object' ? JSON.stringify(message) : message;
-      setErrorMessage(errorText);
-      setLoading(false);
-    });
-
-    // Emit the joinRoom event with the actual player name
-    socket.emit("joinRoom", { roomCode, playerName });
-
-    // Clean-up function to disconnect the socket when the component unmounts
-    return () => {
-      socket.disconnect();
-    };
-  }, [roomCode, playerName]); // Dependencies are now correct
-
-  if (loading) {
+  if (!roomData) {
     return <div>Лобби ачааллаж байна...</div>;
   }
 
-  if (errorMessage) {
-    return <div>Алдаа гарлаа: {errorMessage}</div>;
+  const games = [
+    {
+      id: "excuse",
+      name: "Шалтаг тоочье",
+      component: ExcuseCard,
+      description: "Жижиг тайлбар.",
+      icon: LogOut,
+      color: "bg-blue-400",
+      textColor: "text-blue-900",
+    },
+    {
+      id: "spin",
+      name: "Азаа үзье",
+      component: ExcuseCard,
+      description: "Жижиг тайлбар.",
+      icon: LogOut,
+      color: "bg-blue-400",
+      textColor: "text-blue-900",
+    },
+    {
+      id: "runner",
+      name: "Уралдая",
+      component: ExcuseCard,
+      description: "Жижиг тайлбар.",
+      icon: LogOut,
+      color: "bg-blue-400",
+      textColor: "text-blue-900",
+    },
+    {
+      id: "vote",
+      name: "Хамгийн хамгийн",
+      component: ExcuseCard,
+      description: "Жижиг тайлбар.",
+      icon: LogOut,
+      color: "bg-blue-400",
+      textColor: "text-blue-900",
+    },
+  ];
+  console.log(roomData);
+  const canStart = roomData.players.length >= 2;
+  const selectedGame = roomData.selectedGame;
+
+  // roomData dotorh "gameState" baidliig shalgana
+  if (roomData.gameStatus === "STARTED") {
+    // Togloom ehleegui baisan ch, ehlehiig zaaj ogoh heregtei.
+    const CurrentGameComponent = games.find(
+      (game) => game.id === roomData.currentGame
+    )?.component;
+
+    // Harin "in-game" baih uyd togloomiig haruulna
+    if (CurrentGameComponent) {
+      return <CurrentGameComponent />;
+    }
+    return <div>Тоглоом олдсонгүй!</div>;
   }
 
-  if (roomData?.players?.length === 0) {
-    return <div>no player</div>;
-  }
-
-
-    return <div className="min-h-screen bg-gradient-to-b from-sky-300 via-sky-200 to-blue-70 p-4">
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-sky-300 via-sky-200 to-blue-70 p-4">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <button
@@ -96,43 +93,20 @@ export const RoomLobby =()=> {
         </div>
         <div className="w-24" />
       </div>
- 
-
-<RoomInfoCard/>
-
-      <PlayerCardGeneral/>
-
+      <RoomInfoCard />
+      <PlayerCardGeneral />
       <div className="text-center mb-8">
-       
-
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {games.map((game) => (
             <GameButton
               key={game.id}
               game={game}
-              isHost={isCurrentUserHost}
-              canStart={players.length >= 2}
-              socket={socket}
+              canStart={canStart}
               selectedGame={selectedGame}
-              roomCode={room.code}
             />
           ))}
-        </div> */}
-      </div>
-
-      {/* {players.length < 2 && (
-        <div className="mt-8 text-center">
-          <div className="inline-block bg-yellow-100 border-2 border-yellow-300 rounded-2xl p-4">
-            <p className="text-yellow-800 font-bold">
-              🎯 Тоглоом эхлэхэд 2-оос дээш тоглогч шаардлагатай!
-            </p>
-            <p className="text-yellow-700 text-sm mt-1">
-              Share the room code{" "}
-              <span className="font-black">{room.code}</span> with your friends
-            </p>
-          </div>
         </div>
-      )} */}
+      </div>
 
       <div className="mt-12 flex justify-center space-x-6">
         {["red", "yellow", "purple"].map((color, idx) => (
@@ -144,4 +118,5 @@ export const RoomLobby =()=> {
         ))}
       </div>
     </div>
-}
+  );
+};
