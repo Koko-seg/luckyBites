@@ -34,24 +34,38 @@ export const GameButton: React.FC<GameButtonProps> = ({
   const isHost = host === playerName;
   const IconComponent = game.icon;
   const isSelected = selectedGame === game.id;
-  console.log("-------------------");
-  console.log("Game ID:", game.id);
-  console.log("Is Host:", isHost);
-  console.log("Can Start:", canStart);
-  console.log("Is Selected:", isSelected);
-  console.log("Current selected game in context:", selectedGame);
-  console.log("Players count:", roomData.players.length);
-  console.log("-------------------");
+  // console.log("-------------------");
+  // console.log("Game ID:", game.id);
+  // console.log("Is Host:", isHost);
+  // console.log("Can Start:", canStart);
+  // console.log("Is Selected:", isSelected);
+  // console.log("Current selected game in context:", selectedGame);
+  // console.log("Players count:", roomData.players.length);
+  // console.log("-------------------");
 
-  const handleGameSelect = () => {
-    if (!isHost || !canStart || !socket) return;
-    socket.emit("host:select_game", { roomId: roomCode, gameType: game.id });
-  };
+  // const handleGameSelect = () => {
+  //    console.log("Attempting to emit host:select_game", { roomId: roomCode, gameType: game.id });
+  //   if (!isHost || !canStart || !socket) return;
+  //   socket.emit("host:select_game", { roomCode: roomCode, gameType: game.id });
+  // };
+  //gpt giin sanal
+const handleGameSelect = () => {
+  if (!isHost || !canStart || !socket) return;
+  console.log("Emitting host:select_game", { roomCode, gameType: game.id });
+  socket.emit("host:select_game", { roomCode, gameType: game.id });
+};
 
-  const handleGameStart = () => {
-    if (!isHost || !canStart || !socket || !isSelected) return;
-    socket.emit("host:start_game", { roomId: roomCode });
-  };
+
+ const handleGameStart = () => {
+  console.log("handleGameStart called", { isHost, canStart, socket, isSelected });
+  if (!isHost || !canStart || !socket || !isSelected) {
+    console.log("handleGameStart aborted due to condition fail");
+    return;
+  }
+  console.log("Emitting host:start_game", { roomCode });
+  socket.emit("host:start_game", { roomCode });
+};
+
 
   const buttonClasses = isSelected
     ? `${game.color} ${game.textColor} ring-4 ring-white ring-opacity-60`
@@ -104,6 +118,7 @@ export const GameButton: React.FC<GameButtonProps> = ({
       {isSelected && canStart && (
         <button
           onClick={handleGameStart}
+           disabled={!canStart || !isSelected}
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200"
         >
           🚀 ТОГЛООМ ЭХЛҮҮЛЭХ
