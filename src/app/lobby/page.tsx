@@ -1,10 +1,10 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import io, { Socket } from "socket.io-client";
 import { RoomLobby } from "./components/RoomLobby";
+import { RoomProvider } from "@/context/roomContextTest";
 
 let socket: Socket;
 
@@ -38,7 +38,7 @@ export default function Lobby() {
   //   socket.on("roomData", (data: RoomData) => {
   //     if (data.roomCode !== roomCode) return;
   //     // The line below was causing the issue and has been removed.
-  //     // if (!data.players.length) return; 
+  //     // if (!data.players.length) return;
 
   //     setRoomData(data);
   //     setLoading(false);
@@ -73,8 +73,9 @@ export default function Lobby() {
   // }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200 p-4">
-      {/* <h1 className="text-3xl font-bold mb-4">
+    <RoomProvider>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200 p-4">
+        {/* <h1 className="text-3xl font-bold mb-4">
         Өрөөний код: {roomData?.roomCode}
       </h1>
       <p className="text-xl mb-6">Хост: {roomData?.host}</p>
@@ -87,7 +88,8 @@ export default function Lobby() {
           </li>
         ))}
       </ul> */}
-      <RoomLobby/>
-    </div>
+        <RoomLobby />
+      </div>
+    </RoomProvider>
   );
 }

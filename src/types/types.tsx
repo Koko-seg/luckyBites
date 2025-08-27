@@ -31,16 +31,7 @@ export interface Player {
   isHost: boolean;
   results: Result[];
   reasons: Reason[];
-  
 }
-
-// export interface Player {
-//   id: number;
-//   name: string;
-//   progress: number;
-//   socketId?: string;
-//   isMe?: boolean;
-// }
 
 export interface Reason {
   id: number;
@@ -88,7 +79,7 @@ export interface GameButtonProps {
   game: Game;
   room?: Room;
   isHost: boolean;
-  canStart: boolean
+  canStart: boolean;
 }
 
 export interface PlayerCardProps {
@@ -109,7 +100,11 @@ export interface JoinFormInputsProps {
 }
 
 export interface CreateRoomFormProps {
-  onRoomCreated?: (room: { roomName: string; roomCode: string; roomId: number }) => void;
+  onRoomCreated?: (room: {
+    roomName: string;
+    roomCode: string;
+    roomId: number;
+  }) => void;
 }
 
 export interface CreateFormInputsProps {
