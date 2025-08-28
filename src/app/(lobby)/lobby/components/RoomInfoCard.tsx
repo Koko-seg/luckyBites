@@ -3,8 +3,8 @@ import { useContext } from "react";
 // Import the context
 
 export const RoomInfoCard = () => {
-  const roomData = useContext(RoomContext);
-
+  const data = useContext(RoomContext);
+const { roomData } = data || {};
   if (!roomData) {
     return <div>Лобби ачааллаж байна...</div>;
   }

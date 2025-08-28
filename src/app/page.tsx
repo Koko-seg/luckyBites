@@ -18,7 +18,7 @@ const router = useRouter();
 
   const handleToggle = () => {
     setShowCreateRoom(!showCreateRoom);
-    router.push("/CreateRoom");
+    router.push("/create-room");
   };
 
   const handleToggleJoin = () => {

@@ -3,7 +3,7 @@ import { PlayerCard } from "./PlayerCard";
 import { useSearchParams } from "next/navigation";
 import { useContext } from "react";
 import { Player } from "@/types/types";
-import { RoomContext } from "../../../context/roomContextTest";
+import { RoomContext } from "../../../../context/roomContextTest";
 
 export const PlayerCardGeneral = () => {
   const searchParams = useSearchParams();

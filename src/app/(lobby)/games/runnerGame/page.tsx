@@ -2,13 +2,15 @@
 "use client";
 
 import { RoomContext } from "@/context/roomContextTest";
+import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 
 
 const RunnerGame: React.FC = () => {
+  const router = useRouter();
   const data = useContext(RoomContext);
   const { roomData, socket, playerName } = data || {};
-console.log(data)
+console.log(playerName)
   const [gameStarted, setGameStarted] = useState(false);
   const [playersPositions, setPlayersPositions] = useState<Record<string, number>>({});
   if (!socket || !roomData || !playerName) {
@@ -54,9 +56,15 @@ console.log(data)
     // Сервер рүү update илгээх
     socket?.emit("runner:update_positions", { roomCode: roomData.roomCode, positions: updatedPositions });
   };
-
+const backLobby = () => {
+  if (!roomData || !playerName) return;
+  // Лобби руу буцах логик энд бичнэ үү
+  // Жишээ нь:
+  router.push(`/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`);
+};
   return (
     <div className="min-h-screen p-8 bg-green-200 flex flex-col items-center">
+      <button onClick={backLobby}>Lobby</button>
       {!gameStarted ? (
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-4">Уралдаан эхлэх гэж байна...</h1>

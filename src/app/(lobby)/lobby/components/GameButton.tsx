@@ -36,29 +36,24 @@ export const GameButton: React.FC<GameButtonProps> = ({
   const isSelected = selectedGame === game.id;
   const IconComponent = game.icon;
 
-  
   const handleGameSelect = () => {
     if (!isHost || !socket) return;
 
     socket.emit("host:select_game", { roomCode, gameType: game.id });
-
-    // Host өөрөө game page руу явна
-    router.push(`/games/${game.id}?roomCode=${roomCode}&nickname=${playerName}`);
-  
-
   };
 
   // ✅ Game эхлүүлэх товч
- const handleGameStart = () => {
-  if (!isHost || !canStart || !socket || !isSelected) return;
+  // const handleGameStart = () => {
+  //   if (!isHost || !canStart || !socket || !isSelected) return;
 
-  // бүх тоглогчид руу "game_started" event явуулна
-  socket.emit("host:start_game", { roomCode, gameType: game.id });
-  console.log("Emit host:start_game", roomCode, game.id);
+  //   // бүх тоглогчид руу "game_started" event явуулна
+  //   socket.emit("host:start_game", { roomCode, gameType: game.id });
 
-  // Host өөрөө ч бас шууд game руу орно
-  router.push(`/games/${game.id}?roomCode=${roomCode}&nickname=${playerName}`);
-};
+  //   // Host өөрөө ч бас шууд game руу орно
+  //   router.push(
+  //     `/games/${game.id}?roomCode=${roomCode}&playerName=${playerName}`
+  //   );
+  // };
 
   // Button style
   const buttonClasses = isSelected
@@ -68,7 +63,9 @@ export const GameButton: React.FC<GameButtonProps> = ({
   // Player view (host биш)
   if (!isHost) {
     return (
-      <div className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 opacity-60`}>
+      <div
+        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 opacity-60`}
+      >
         <div className="flex flex-col items-center text-center">
           <div className="mb-4 p-4 bg-white/30 rounded-2xl">
             <IconComponent size={48} className="mx-auto" />
@@ -85,7 +82,7 @@ export const GameButton: React.FC<GameButtonProps> = ({
     );
   }
 
-  // Host view
+  
   return (
     <div className="flex flex-col gap-2">
       <button
@@ -109,14 +106,14 @@ export const GameButton: React.FC<GameButtonProps> = ({
       </button>
 
       {/* Game эхлүүлэх товч зөвхөн сонгогдсон game-д */}
-      {isSelected && canStart && (
+      {/* {isSelected && canStart && (
         <button
           onClick={handleGameStart}
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200"
         >
           🚀 ТОГЛООМ ЭХЛҮҮЛЭХ
         </button>
-      )}
+      )} */}
     </div>
   );
 };
