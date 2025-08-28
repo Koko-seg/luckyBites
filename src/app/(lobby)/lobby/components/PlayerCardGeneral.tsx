@@ -11,7 +11,7 @@ export const PlayerCardGeneral = () => {
   const playerName = searchParams.get("playerName");
 
   const data = useContext(RoomContext);
- const { roomData } = data || {};
+  const { roomData } = data || {};
   const players: Player[] =
     roomData?.players?.map((name, index) => ({
       id: index,
@@ -34,12 +34,12 @@ export const PlayerCardGeneral = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mb-12">
-      <h2 className="text-1xl font-bold text-blue-800 mb-6 text-center flex items-center justify-center gap-2">
-        <Users size={24} />
+    <div className="max-w-full mx-auto mb-4 p-4">
+      <h2 className="text-base font-bold text-purple-800 mb-4 text-center flex items-center justify-center gap-2">
+        <Users size={20} />
         Өрөөнд байгаа тоглогчид ({roomData?.players.length}/10)
       </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {players.map((player, index) => (
           <PlayerCard
             key={player.id}
@@ -52,11 +52,11 @@ export const PlayerCardGeneral = () => {
         ))}
 
         {players.length < 6 && (
-          <div className="bg-white/40 backdrop-blur-sm p-4 rounded-2xl border-3 border-dashed border-blue-300 text-center flex flex-col items-center justify-center min-h-[120px]">
-            <div className="w-12 h-12 bg-blue-200 rounded-full mx-auto mb-3 flex items-center justify-center text-blue-500">
-              <Users size={24} />
+          <div className="flex flex-col items-center justify-center bg-white/40 backdrop-blur-sm p-4 rounded-2xl border-3 border-dashed border-purple-300 text-center text-purple-500">
+            <div className="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center text-purple-500 mb-2">
+              <Users size={20} />
             </div>
-            <p className="text-blue-600 font-medium text-sm">
+            <p className="text-xs font-medium">
               Бусад тоглогчдыг хүлээж байна...
             </p>
           </div>

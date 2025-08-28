@@ -23,33 +23,32 @@ export const ExcuseSection: React.FC = () => {
   }
   const backLobby = () => {
     if (!roomData || !playerName) return;
-    // Лобби руу буцах логик энд бичнэ үү
-    // Жишээ нь:
     router.push(
       `/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`
     );
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
+    <div className="min-h-screen bg-white p-2 flex flex-col items-center">
+    <div className="min-h-screen  flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
       <button
-        className="absolute top-4 left-4 text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded shadow"
+        className="absolute top-4 left-4 text-white bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg shadow-md transition-colors"
         onClick={backLobby}
       >
         Lobby
       </button>
       <ExcuseBackground />
-      <div className="relative z-10 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 max-w-xs sm:max-w-md w-full border border-white/20">
+      <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-xs sm:max-w-md w-full border border-purple-300">
         <ExcuseHeader />
-        <h2 className="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6 text-gray-700 drop-shadow-sm">
-          Шалтаг аа бич📝
+        <h2 className="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6 text-purple-700 drop-shadow-sm">
+          Шалтаг аа бич📝 {playerName}
         </h2>
 
         {submitted ? (
           <div className="text-center py-6 sm:py-8">
-            <p className="text-lg font-bold text-green-600 mb-2 drop-shadow-sm">
+            <p className="text-lg font-bold text-purple-600 mb-2 drop-shadow-sm">
               Шалтаг амжилттай илгээгдлээ!
             </p>
-            <p className="text-gray-600">Шалтагаа бичсэнд баярлалаа кк.</p>
+            <p className="text-purple-500">Шалтагаа бичсэнд баярлалаа кк.</p>
           </div>
         ) : (
           <ExcuseForm />
@@ -57,6 +56,7 @@ export const ExcuseSection: React.FC = () => {
 
         <AnimatedDotAll />
       </div>
+    </div>
     </div>
   );
 };
