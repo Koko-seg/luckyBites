@@ -24,7 +24,7 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
   const handleCreateRoom = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
-    setErrorMessage("")
+    setErrorMessage("") 
 
     try {
       const response = await fetch("http://localhost:4200/room", {
@@ -34,20 +34,23 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
       })
 
       const data = await response.json()
+      console.log("aslkdjjk",data);
+      
 
       if (!response.ok) {
         throw new Error(data.message || "Өрөө үүсгэхэд алдаа гарлаа")
       }
 
-      if (onRoomCreated) {
-        onRoomCreated({
-          roomName: data.roomName,
-          roomCode: data.roomCode,
-          roomId: data.roomId,
-        })
-      }
+   if (onRoomCreated) {
+  onRoomCreated({
+    roomName: data.roomName,
+    roomCode: data.roomCode,
+    roomId: data.roomId,
+  })
+}
 
-      router.push(`/lobby?roomId=${data.roomId}&playerId=${data.roomCode}`)
+    router.push(`/lobby?roomId=${data.roomId}&playerId=${data.hostPlayerId}`)
+
     } catch (err: any) {
       setErrorMessage(err.message || "Алдаа гарлаа")
     } finally {
