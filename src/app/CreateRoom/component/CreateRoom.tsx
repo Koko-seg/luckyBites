@@ -1,40 +1,42 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import type React from "react"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { ExcuseBackground } from "@/components/excuseBackground"
 
 interface CreateRoomFormProps {
   onRoomCreated?: (room: {
-    roomName: string;
-    roomCode: string;
-    roomId: number;
-  }) => void;
+    roomName: string
+    roomCode: string
+    roomId: number
+  }) => void
 }
 
 export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
-  const router = useRouter();
-
-  const [roomName, setRoomName] = useState("");
-  const [hostNickname, setHostNickname] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter()
+  const [roomName, setRoomName] = useState("")
+  const [hostNickname, setHostNickname] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleCreateRoom = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setErrorMessage("");
+    e.preventDefault()
+    setIsLoading(true)
+    setErrorMessage("")
 
     try {
       const response = await fetch("http://localhost:4200/room", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ roomName, hostNickname }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || "Өрөө үүсгэхэд алдаа гарлаа");
+        throw new Error(data.message || "Өрөө үүсгэхэд алдаа гарлаа")
       }
 
       if (onRoomCreated) {
@@ -42,32 +44,30 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
           roomName: data.roomName,
           roomCode: data.roomCode,
           roomId: data.roomId,
-        });
+        })
       }
 
-  
-     router.push(
-        `/lobby?roomId=${data.roomId}&roomCode=${data.roomCode}&playerName=${hostNickname}`
-      );
+      router.push(`/lobby?roomId=${data.roomId}&playerId=${data.roomCode}`)
     } catch (err: any) {
-      const message = err.message || err;
-      setErrorMessage(typeof message === 'object' ? JSON.stringify(message) : message);
+      setErrorMessage(err.message || "Алдаа гарлаа")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
+    <div className="relative flex items-center justify-center p-4 overflow-hidden min-h-1/2 bg-gradient-to-brsm:p-6 lg:p-8">
+      <ExcuseBackground />
+
       <form
-        className="bg-white p-8 w-full max-w-md rounded-xl shadow-lg"
+        className="bg-white p-8 w-full max-w-md rounded-xl shadow-lg relative z-10 animate-fade-in-up animate-duration-700 hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]"
         onSubmit={handleCreateRoom}
       >
-        <div className="items-center text-center mb-8">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-green-300 mb-2 sm:mb-4 drop-shadow-2xl transform -rotate-2">
+        <div className="items-center mb-8 text-center">
+          <h1 className="mb-2 text-4xl font-black text-green-300 transition-transform duration-300 transform sm:text-6xl lg:text-7xl xl:text-8xl sm:mb-4 drop-shadow-2xl -rotate-2 animate-fade-in-left animate-duration-800 animate-delay-200 hover:scale-110">
             Өрөө
           </h1>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-yellow-400 mb-2 drop-shadow-2xl transform rotate-1">
+          <h1 className="mb-2 text-4xl font-black text-yellow-400 transition-transform duration-300 transform sm:text-6xl lg:text-7xl xl:text-8xl drop-shadow-2xl rotate-1 animate-fade-in-right animate-duration-800 animate-delay-400 hover:scale-110">
             Үүсгэх
           </h1>
         </div>
@@ -77,7 +77,7 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
           placeholder="Өрөөний нэр"
           value={roomName}
           onChange={(e) => setRoomName(e.target.value)}
-          className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full mb-4 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 transform focus:scale-[1.02] hover:border-blue-300 animate-fade-in-up animate-duration-600 animate-delay-600"
         />
 
         <input
@@ -85,27 +85,50 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
           placeholder="Нэрээ оруулна уу (Host)"
           value={hostNickname}
           onChange={(e) => setHostNickname(e.target.value)}
-          className="w-full mb-6 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full mb-6 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-300 transform focus:scale-[1.02] hover:border-blue-300 animate-fade-in-up animate-duration-600 animate-delay-700"
         />
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300 mb-6 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] animate-fade-in-up animate-duration-600 animate-delay-800 relative overflow-hidden group"
         >
-          {isLoading ? "Үүсгэж байна..." : "Өрөө Үүсгэх"}
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+            </div>
+          )}
+
+          <span className={`transition-opacity duration-300 ${isLoading ? "opacity-0" : "opacity-100"}`}>
+            {isLoading ? "Үүсгэж байна..." : "Өрөө Үүсгэх"}
+          </span>
+
+          <div className="absolute inset-0 transition-opacity duration-300 bg-white opacity-0 group-hover:opacity-10"></div>
         </button>
 
         {errorMessage && (
           <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mt-4"
+            className="bg-red-100 border-l-4 border-red-400 text-red-700 px-4 py-3 rounded-lg mt-4 animate-fade-in-up animate-duration-500 transform hover:scale-[1.01] transition-transform duration-200"
             role="alert"
           >
-            <strong className="font-bold">Алдаа гарлаа! </strong>
-            <span className="block sm:inline">{errorMessage}</span>
+            <div className="flex items-center">
+              <div className="flex-shrink-0 w-5 h-5 mr-2">
+                <svg className="w-full h-full animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div>
+                <strong className="font-bold">Алдаа гарлаа! </strong>
+                <span className="block sm:inline">{errorMessage}</span>
+              </div>
+            </div>
           </div>
         )}
       </form>
     </div>
-  );
+  )
 }
