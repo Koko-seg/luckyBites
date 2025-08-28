@@ -42,25 +42,12 @@ export const GameButton: React.FC<GameButtonProps> = ({
     socket.emit("host:select_game", { roomCode, gameType: game.id });
   };
 
-  // ✅ Game эхлүүлэх товч
-  // const handleGameStart = () => {
-  //   if (!isHost || !canStart || !socket || !isSelected) return;
-
-  //   // бүх тоглогчид руу "game_started" event явуулна
-  //   socket.emit("host:start_game", { roomCode, gameType: game.id });
-
-  //   // Host өөрөө ч бас шууд game руу орно
-  //   router.push(
-  //     `/games/${game.id}?roomCode=${roomCode}&playerName=${playerName}`
-  //   );
-  // };
-
-  // Button style
+  
   const buttonClasses = isSelected
     ? `${game.color} ${game.textColor} ring-4 ring-white ring-opacity-60`
     : `${game.color} ${game.textColor}`;
 
-  // Player view (host биш)
+
   if (!isHost) {
     return (
       <div

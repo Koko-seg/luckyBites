@@ -8,10 +8,10 @@ import { RoomContext } from "@/context/roomContextTest";
 import ExcuseCard from "@/app/(lobby)/games/excuse/components/ExcuseCard";
 import { GameButton } from "./GameButton";
 import RaceGame from "@/app/(lobby)/games/runnerGame/page";
+import SpinWheelPage from "../../games/spin/page";
 
 export const RoomLobby = () => {
-
-  const  data  = useContext(RoomContext);
+  const data = useContext(RoomContext);
   const { roomData } = data || {};
 
   if (!roomData) {
@@ -23,51 +23,51 @@ export const RoomLobby = () => {
       id: "excuse",
       name: "Шалтаг тоочье",
       component: ExcuseCard,
-      description: "Жижиг тайлбар.",
+      description: "Хэн нь сайн шалтаг тоочих вэ?.",
       icon: LogOut,
-      color: "bg-blue-400",
-      textColor: "text-blue-900",
+      color: "bg-purple-600",
+      textColor: "text-white",
     },
     {
       id: "spin",
       name: "Азаа үзье",
-      component: ExcuseCard,
-      description: "Жижиг тайлбар.",
+      component: SpinWheelPage,
+      description: "Өнөөдөр азтай өдөр чинь байх болов уу даа.",
       icon: LogOut,
-      color: "bg-blue-400",
-      textColor: "text-blue-900",
+      color: "bg-pink-600",
+      textColor: "text-white",
     },
     {
       id: "runnerGame",
-      name: "Уралдая",
+      name: "Уралдах уу",
       component: RaceGame,
-      description: "Жижиг тайлбар.",
+      description: "Гэхдээ ухаанаараа биш шүү хаха.",
       icon: LogOut,
-      color: "bg-blue-400",
-      textColor: "text-blue-900",
+      color: "bg-green-500",
+      textColor: "text-white",
     },
     {
       id: "vote",
       name: "Хамгийн хамгийн",
       component: ExcuseCard,
-      description: "Жижиг тайлбар.",
+      description: "За тэгээд гомдоод байв.",
       icon: LogOut,
-      color: "bg-blue-400",
-      textColor: "text-blue-900",
+      color: "bg-yellow-500",
+      textColor: "text-white",
     },
   ];
 
   console.log(roomData);
   const canStart = roomData.players.length >= 2;
   const selectedGame = roomData.selectedGame;
-  // roomData dotorh "gameState" baidliig shalgana
+
   if (roomData.gameStatus === "STARTED") {
-    // Togloom ehleegui baisan ch, ehlehiig zaaj ogoh heregtei.
+
     const CurrentGameComponent = games.find(
       (game) => game.id === roomData.currentGame
     )?.component;
 
-    // Harin "in-game" baih uyd togloomiig haruulna
+ 
     if (CurrentGameComponent) {
       return <CurrentGameComponent />;
     }
@@ -75,50 +75,55 @@ export const RoomLobby = () => {
   }
 
   return (
-
-    <div className="min-h-screen bg-gradient-to-b from-sky-300 via-sky-200 to-blue-70 p-4">
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <button
-            // onClick={onBack}
-            className="flex items-center gap-2 text-blue-700 hover:text-blue-800 font-medium transition-colors bg-white/50 px-4 py-2 rounded-full backdrop-blur-sm"
-          >
-            <ArrowLeft size={20} />
-            Нүүр хуудас
-          </button>
-          <button
-            // onClick={handleLeaveRoom}
-            className="flex items-center gap-2 text-red-700 hover:text-red-800 font-medium transition-colors bg-red-100/50 hover:bg-red-100/80 px-4 py-2 rounded-full backdrop-blur-sm border border-red-200"
-          >
-            <LogOut size={20} />
-            Өрөөнөөс гарах
-          </button>
+    <div className="min-h-screen bg-white p-2 flex flex-col items-center">
+      <div className="w-full max-w-sm">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-1">
+         
+      
+          </div>
         </div>
-        <div className="w-24" />
-      </div>
-      <RoomInfoCard />
-      <PlayerCardGeneral />
-      <div className="text-center mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-          {games.map((game) => (
-            <GameButton
-              key={game.id}
-              game={game}
-              canStart={canStart}
-              selectedGame={selectedGame}
-            />
+        <div className="max-w-sm mx-auto">
+          <RoomInfoCard />
+        <div className="text-center">
+        
+          <p className="text-sm italic text-purple-500">
+            Жич: Зөвхөн <span className="font-bold text-purple-800">Босс</span> л тоглоомоо сонгоно сорри 🙏
+          </p>
+        </div>
+            
+             
+          <PlayerCardGeneral />
+        </div>
+        <div className="text-center mb-4">
+          <div className="grid grid-cols-1 gap-3 max-w-sm mx-auto">
+            {games.map((game) => (
+              <GameButton
+                key={game.id}
+                game={game}
+                canStart={canStart}
+                selectedGame={selectedGame}
+              />
+            ))}
+          </div>
+        </div>
+      <button
+              // onClick={handleLeaveRoom}
+              className="flex items-center gap-1 text-purple-700 hover:text-purple-800 font-medium transition-colors bg-purple-100/50 hover:bg-purple-100/80 px-2 py-1 rounded-full backdrop-blur-sm border border-purple-200 text-xs sm:text-sm"
+            >
+              <LogOut size={14} />
+              Өрөөнөөс гарах
+            </button>
+        <div className="mt-6 flex justify-center space-x-3">
+          {["red", "yellow", "purple"].map((color, idx) => (
+            <div
+              key={idx}
+              className={`w-4 h-4 bg-${color}-400 rounded-full animate-bounce opacity-60`}
+              style={{ animationDelay: `${idx * 0.2}s` }}
+            ></div>
           ))}
         </div>
-      </div>
 
-      <div className="mt-12 flex justify-center space-x-6">
-        {["red", "yellow", "purple"].map((color, idx) => (
-          <div
-            key={idx}
-            className={`w-6 h-6 bg-${color}-400 rounded-full animate-bounce opacity-60`}
-            style={{ animationDelay: `${idx * 0.2}s` }}
-          ></div>
-        ))}
       </div>
     </div>
   );
