@@ -5,9 +5,9 @@ import { useContext } from "react";
 import { PlayerCardGeneral } from "./PlayerCardGeneral";
 import { RoomInfoCard } from "./RoomInfoCard";
 import { RoomContext } from "@/context/roomContextTest";
-import ExcuseCard from "@/app/(games)/excuse/components/ExcuseCard";
+import ExcuseCard from "@/app/(lobby)/games/excuse/components/ExcuseCard";
 import { GameButton } from "./GameButton";
-import RaceGame from "@/app/(games)/runnerGame/page";
+import RaceGame from "@/app/(lobby)/games/runnerGame/page";
 
 export const RoomLobby = () => {
 
