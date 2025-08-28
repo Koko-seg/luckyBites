@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import io, { Socket } from "socket.io-client";
+import { ExcuseBackground } from "@/components/excuseBackground";
  
 let socket: Socket;
  
@@ -13,6 +14,8 @@ export default function JoinRoom() {
   const [nickname, setNickname] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [player, setPlayers]=useState("")
+  const [isHost,setIsHost]=useState(false)
  
   useEffect(() => {
     socket = io("http://localhost:4200");
@@ -54,41 +57,68 @@ export default function JoinRoom() {
     setIsConnecting(true);
  
     socket.emit("joinRoom", { roomCode, playerName: nickname });
+      socket.emit("autoJoin", { nickname}, (res: any) => {
+    setPlayers(res.players);
+    setRoomCode(res.code);
+
+    if(res.players[0].id === socket.id) setIsHost(true);})
   };
  
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Өрөөнд Нэвтрэх</h1>
- 
+  <div className="min-h-screen bg-white flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
+    <ExcuseBackground />
+
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleJoinRoom();
+      }}
+      className="bg-gray-50 p-8 w-full max-w-md rounded-xl shadow-lg"
+    >
+      <div className="items-center text-center mb-8">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-violet-700 mb-2 sm:mb-4 drop-shadow-2xl transform -rotate-2">
+          Өрөөнд
+        </h1>
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-gray-300 mb-2 drop-shadow-2xl transform rotate-1">
+          Нэвтрэх
+        </h1>
+      </div>
+
       <input
         type="text"
         placeholder="Өрөөний код"
         value={roomCode}
         onChange={(e) => setRoomCode(e.target.value)}
-        className="mb-4 px-4 py-2 rounded border w-72 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
- 
+
       <input
         type="text"
-        placeholder="Nickname"
+        placeholder="Өөрийн нэр"
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
-        className="mb-6 px-4 py-2 rounded border w-72 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="w-full mb-6 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
- 
-      <Button
-        className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-        onClick={handleJoinRoom}
+
+      <button
+        type="submit"
         disabled={isConnecting}
+        className="w-full py-2 px-4 bg-violet-600 text-white font-semibold rounded-lg hover:bg-violet-700 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isConnecting ? "Холболт үүсгэж байна..." : "Нэвтрэх"}
-      </Button>
- 
+        {isConnecting ? "Холболт үүсгэж байна..." : "Өрөөнд нэвтрэх"}
+      </button>
+
       {errorMessage && (
-        <div className="text-red-500 font-semibold mt-2">{errorMessage}</div>
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mt-4"
+          role="alert"
+        >
+          <strong className="font-bold">Алдаа гарлаа! </strong>
+          <span className="block sm:inline">{errorMessage}</span>
+        </div>
       )}
-    </div>
-  );
+    </form>
+  </div>
+);
 }
- 
  

@@ -13,7 +13,6 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
   isCurrentUserHost,
   onRemove,
 }) => {
-  console.log(player)
   return (
     <div
       className={`bg-white/80 backdrop-blur-sm p-3 sm:p-4 rounded-2xl shadow-lg border-2 w-full sm:w-44 ${

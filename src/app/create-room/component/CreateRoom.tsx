@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ExcuseBackground } from "@/components/excuseBackground";
 
 interface CreateRoomFormProps {
   onRoomCreated?: (room: {
@@ -58,16 +59,17 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
+    <div className="min-h-screen bg-gradient-to-br flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
+      <ExcuseBackground/>
       <form
-        className="bg-white p-8 w-full max-w-md rounded-xl shadow-lg"
+        className="bg-gray-50 p-8 w-full max-w-md rounded-xl shadow-lg"
         onSubmit={handleCreateRoom}
       >
         <div className="items-center text-center mb-8">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-green-300 mb-2 sm:mb-4 drop-shadow-2xl transform -rotate-2">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-violet-700 mb-2 sm:mb-4 drop-shadow-2xl transform -rotate-2">
             Өрөө
           </h1>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-yellow-400 mb-2 drop-shadow-2xl transform rotate-1">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-gray-300 mb-2 drop-shadow-2xl transform rotate-1">
             Үүсгэх
           </h1>
         </div>
@@ -91,7 +93,7 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-2 px-4 bg-violet-600 text-white font-semibold rounded-lg hover:bg-violet-700 transition-colors mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Үүсгэж байна..." : "Өрөө Үүсгэх"}
         </button>

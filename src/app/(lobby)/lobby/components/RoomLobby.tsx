@@ -56,8 +56,6 @@ export const RoomLobby = () => {
       textColor: "text-blue-900",
     },
   ];
-
-  console.log(roomData);
   const canStart = roomData.players.length >= 2;
   const selectedGame = roomData.selectedGame;
   // roomData dotorh "gameState" baidliig shalgana

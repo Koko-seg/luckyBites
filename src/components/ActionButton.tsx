@@ -9,6 +9,7 @@ interface ButtonProps {
   hoverColor: string;
   borderColor: string;
   hoverBorderColor: string;
+  textColor:string
 }
 
 const ActionButton: React.FC<ButtonProps> = ({
@@ -19,11 +20,12 @@ const ActionButton: React.FC<ButtonProps> = ({
   hoverColor,
   borderColor,
   hoverBorderColor,
+  textColor,
 }) => {
   return (
     <button
       onClick={onClick}
-      className={`w-full group relative overflow-hidden ${bgColor} ${hoverColor} text-white font-bold py-4 sm:py-6 px-6 sm:px-8 rounded-2xl shadow-2xl transform transition-all duration-200 hover:scale-105 hover:shadow-3xl active:scale-95`}
+      className={`w-full group relative overflow-hidden ${bgColor} ${hoverColor} ${textColor} font-bold py-4 sm:py-6 px-6 sm:px-8 rounded-2xl shadow-2xl transform transition-all duration-200 hover:scale-105 hover:shadow-3xl active:scale-95`}
     >
       <div className={`absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-200`}></div>
       <div className="relative flex items-center justify-center space-x-2 sm:space-x-3">

@@ -27,7 +27,7 @@ const router = useRouter();
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black p-4">
+    <div className="flex flex-col items-center justify-center  min-h-screen bg-white p-4">
   <WhiteDot/>
 
       <Header/>
@@ -39,20 +39,22 @@ const router = useRouter();
             onClick={handleToggle}
             icon={<Plus className="w-full h-full" />}
             text="  Өрөө Үүсгэх"
-            bgColor=" bg-purple-500"
-            hoverColor="hover:bg-purple-600"
-            borderColor="bg-puple-600"
-            hoverBorderColor="group-hover:bg-purple-800"
+            textColor="text-white"
+            bgColor=" bg-violet-600"
+            hoverColor="hover:bg-violet-700"
+            borderColor="bg-violet-800"
+            hoverBorderColor="group-hover:bg-violet-900"
           />
 
           <ActionButton
             onClick={handleToggleJoin}
             icon={<Users className="w-full h-full" />}
             text="Өрөөнд Нэвтрэх"
-            bgColor="bg-gray-400"
-            hoverColor="hover:bg-gray-600"
-            borderColor="bg-gray-700"
-            hoverBorderColor="group-hover:bg-gray-800"
+            bgColor="bg-white"
+            textColor="text-violet-600"
+            hoverColor="hover:bg-white"
+            borderColor="bg-white"
+            hoverBorderColor="group-hover:bg-white"
           />
         </div>
 
