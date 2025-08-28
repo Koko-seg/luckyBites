@@ -27,7 +27,7 @@ const router = useRouter();
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-yellow-100 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black p-4">
   <WhiteDot/>
 
       <Header/>
@@ -39,20 +39,20 @@ const router = useRouter();
             onClick={handleToggle}
             icon={<Plus className="w-full h-full" />}
             text="  Өрөө Үүсгэх"
-            bgColor="bg-yellow-400"
-            hoverColor="hover:bg-yellow-600"
-            borderColor="bg-yellow-700"
-            hoverBorderColor="group-hover:bg-yellow-800"
+            bgColor=" bg-purple-500"
+            hoverColor="hover:bg-purple-600"
+            borderColor="bg-puple-600"
+            hoverBorderColor="group-hover:bg-purple-800"
           />
 
           <ActionButton
             onClick={handleToggleJoin}
             icon={<Users className="w-full h-full" />}
             text="Өрөөнд Нэвтрэх"
-            bgColor="bg-orange-400"
-            hoverColor="hover:bg-orange-600"
-            borderColor="bg-orange-700"
-            hoverBorderColor="group-hover:bg-orange-800"
+            bgColor="bg-gray-400"
+            hoverColor="hover:bg-gray-600"
+            borderColor="bg-gray-700"
+            hoverBorderColor="group-hover:bg-gray-800"
           />
         </div>
 
@@ -67,35 +67,21 @@ const router = useRouter();
 };
 
 export default Page;
-
-{/* <div className="flex flex-col items-center justify-center min-h-screen bg-blue-400 p-4">
-  <WhiteDot />
-
-  <Header />
-
-  <div className="flex space-x-4 mb-8">
-    <div className="space-y-4 sm:space-y-6">
-      <ActionButton
-        onClick={handleToggle}
-        icon={<Plus className="w-full h-full" />}
-        text="Өрөө Үүсгэх"
-        bgColor="bg-sky-400"
-        hoverColor="hover:bg-sky-500"
-        borderColor="bg-sky-600"
-        hoverBorderColor="group-hover:bg-sky-700"
-      />
-
-      <ActionButton
-        onClick={handleToggleJoin}
-        icon={<Users className="w-full h-full" />}
-        text="Өрөөнд Нэвтрэх"
-        bgColor="bg-indigo-400"
-        hoverColor="hover:bg-indigo-500"
-        borderColor="bg-indigo-600"
-        hoverBorderColor="group-hover:bg-indigo-700"
-      />
+<div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+      {/* Icon/Logo */}
+      <div className="w-40 h-40 bg-purple-600 rounded-3xl flex items-center justify-center mb-6 shadow-lg">
+        {/* You would replace this with your actual SVG or image */}
+        <div className="w-24 h-24 bg-purple-400 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-white rounded-full"></div>
+        </div>
+      </div>
+ 
+      {/* App Name */}
+      <h1 className="text-4xl font-semibold mb-10">Elingo</h1>
+ 
+      {/* Loading Spinner */}
+      <div className="w-16 h-16 relative">
+        <div className="w-16 h-16 border-8 border-purple-400 border-dotted rounded-full animate-spin"></div>
+        <div className="w-4 h-4 bg-purple-400 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+      </div>
     </div>
-  </div>
-
-  <AnimatedDotAll />
-</div> */}
