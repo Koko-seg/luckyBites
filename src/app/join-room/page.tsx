@@ -1,4 +1,3 @@
-
 "use client";
 
 import BackgroundAnimation from "@/components/backgroundAnimation";
