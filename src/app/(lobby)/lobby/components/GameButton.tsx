@@ -46,7 +46,7 @@ export const GameButton: React.FC<GameButtonProps> = ({
   const buttonClasses = isSelected
     ? `${game.color} ${game.textColor} ring-4 ring-white ring-opacity-60`
     : `${game.color} ${game.textColor}`;
-
+console.log(game.color, game.textColor);
 
   if (!isHost) {
     return (
@@ -99,8 +99,8 @@ export const GameButton: React.FC<GameButtonProps> = ({
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200"
         >
           🚀 ТОГЛООМ ЭХЛҮҮЛЭХ
-        </button>
-      )} */}
+        </button> */}
+      {/* )} */}
     </div>
   );
 };

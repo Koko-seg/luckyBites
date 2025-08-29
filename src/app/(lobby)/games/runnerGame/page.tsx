@@ -1,93 +1,110 @@
-// app/(games)/runnerGame/page.tsx
 "use client";
 
 import { RoomContext } from "@/context/roomContextTest";
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 
-
 const RunnerGame: React.FC = () => {
   const router = useRouter();
   const data = useContext(RoomContext);
   const { roomData, socket, playerName } = data || {};
-console.log(playerName)
+
   const [gameStarted, setGameStarted] = useState(false);
   const [playersPositions, setPlayersPositions] = useState<Record<string, number>>({});
+  const [winner, setWinner] = useState<string | null>(null);
+
   if (!socket || !roomData || !playerName) {
     return <div>Лобби ачааллаж байна...</div>;
   }
 
-  // Socket events
+  // --- Socket listener ---
   useEffect(() => {
     if (!socket) return;
 
-    // Тоглоом эхлэх
-    const handleStart = () => {
-      setGameStarted(true);
-
-      // Анхны байрлал тохируулах
-      const initialPositions: Record<string, number> = {};
-      roomData.players.forEach(p => (initialPositions[p] = 0));
-      setPlayersPositions(initialPositions);
+    const handlePositions = (positions: Record<string, number>) => setPlayersPositions(positions);
+    const handleFinish = ({ winner }: { winner: string }) => {
+      setWinner(winner);
+      setGameStarted(false);
     };
 
-    // Хэрэглэгчдийн байрлал update
-    const handlePositions = (positions: Record<string, number>) => {
-      setPlayersPositions(positions);
-    };
-
-    socket.on("runner:start_game", handleStart);
     socket.on("runner:update_positions", handlePositions);
+    socket.on("runner:finish", handleFinish);
 
     return () => {
-      socket.off("runner:start_game", handleStart);
       socket.off("runner:update_positions", handlePositions);
+      socket.off("runner:finish", handleFinish);
     };
-  }, [socket, roomData]);
+  }, [socket]);
 
-  // Host хөдөлгөх event
+  // --- Initialize positions on roomData change ---
+  useEffect(() => {
+    const initialPositions: Record<string, number> = {};
+    roomData.players.forEach(p => (initialPositions[p] = 0));
+    setPlayersPositions(initialPositions);
+    setWinner(null);
+    setGameStarted(false);
+  }, [roomData.players]);
+
+  // --- Move forward ---
   const moveForward = () => {
-    if (!roomData) return;
+    if (!gameStarted) setGameStarted(true);
+
     const currentPos = playersPositions[playerName!] || 0;
-    const newPos = Math.min(currentPos + 3, 100); // % хэлбэрээр
+    const newPos = Math.min(currentPos + 5, 100);
     const updatedPositions = { ...playersPositions, [playerName!]: newPos };
     setPlayersPositions(updatedPositions);
 
-    // Сервер рүү update илгээх
-    socket?.emit("runner:update_positions", { roomCode: roomData.roomCode, positions: updatedPositions });
+    socket.emit("runner:update_positions", { roomCode: roomData.roomCode, positions: updatedPositions });
+
+    if (newPos >= 100) {
+      setWinner(playerName);
+      socket.emit("runner:finish", { roomCode: roomData.roomCode, winner: playerName });
+    }
   };
-const backLobby = () => {
-  if (!roomData || !playerName) return;
-  // Лобби руу буцах логик энд бичнэ үү
-  // Жишээ нь:
-  router.push(`/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`);
-};
+
+  const backLobby = () => {
+    router.push(`/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`);
+  };
+
   return (
     <div className="min-h-screen p-8 bg-green-200 flex flex-col items-center">
-      <button onClick={backLobby}>Lobby</button>
-      {!gameStarted ? (
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Уралдаан эхлэх гэж байна...</h1>
-          <p>Бусад тоглогчдыг хүлээнэ үү</p>
+      <div className="flex justify-between w-full max-w-lg mb-6">
+        <button onClick={backLobby} className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">
+          Lobby
+        </button>
+      </div>
+
+      {winner ? (
+        <div className="text-center p-8 bg-yellow-100 rounded-xl shadow-lg">
+          <h1 className="text-4xl font-bold mb-4">🎉 {winner} яллаа!</h1>
         </div>
       ) : (
         <div className="w-full max-w-lg space-y-4">
-          <h1 className="text-3xl font-bold text-center mb-4">🏃‍♂️ Уралдаан эхэлсэн!</h1>
-          {Object.entries(playersPositions).map(([name, pos]) => (
-            <div key={name} className="w-full bg-white rounded-full h-6 relative">
-              <div
-                className="bg-blue-500 h-6 rounded-full transition-all"
-                style={{ width: `${pos}%` }}
-              />
-              <span className="absolute left-2 top-0 text-sm font-bold">{name}</span>
-            </div>
-          ))}
+          {gameStarted && (
+            <h1 className="text-3xl font-bold text-center mb-4">🏃‍♂️ Уралдаан эхэлсэн!</h1>
+          )}
+
+          {/* roomData.players ашиглан map */}
+          {roomData.players.map((name) => {
+            const progress = playersPositions[name] || 0;
+            return (
+              <div key={name} className="w-full bg-white rounded-full h-6 relative">
+                <div
+                  className={`h-6 rounded-full transition-all duration-500 ${
+                    name === playerName ? "bg-blue-500" : "bg-gray-400"
+                  }`}
+                  style={{ width: `${progress}%` }}
+                />
+                <span className="absolute left-2 top-0 text-sm font-bold">{name}</span>
+              </div>
+            );
+          })}
 
           <button
             onClick={moveForward}
             className="mt-6 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-xl"
           >
-            🏃‍♂️ Даралт хийх
+            🏃‍♂️ Гүйгээд урагшаа
           </button>
         </div>
       )}
