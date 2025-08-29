@@ -47,6 +47,7 @@ export const RoomLobby = () => {
       textColor: "text-white",
     },
   ];
+  
   const canStart = roomData.players.length >= 2;
   const selectedGame = roomData.selectedGame;
 
@@ -97,14 +98,14 @@ export const RoomLobby = () => {
           </div>
         </div>
       <button
-              // onClick={handleLeaveRoom}
+
               className="flex items-center gap-1 text-purple-700 hover:text-purple-800 font-medium transition-colors bg-purple-100/50 hover:bg-purple-100/80 px-2 py-1 rounded-full backdrop-blur-sm border border-purple-200 text-xs sm:text-sm"
             >
               <LogOut size={14} />
               Өрөөнөөс гарах
             </button>
         <div className="mt-6 flex justify-center space-x-3">
-          {["red", "yellow", "purple"].map((color, idx) => (
+          {["red", "yellow", "purp  le"].map((color, idx) => (
             <div
               key={idx}
               className={`w-4 h-4 bg-${color}-400 rounded-full animate-bounce opacity-60`}
