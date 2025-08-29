@@ -46,15 +46,6 @@ export const RoomLobby = () => {
       color: "bg-green-500",
       textColor: "text-white",
     },
-    {
-      id: "vote",
-      name: "Хамгийн хамгийн",
-      component: ExcuseCard,
-      description: "За тэгээд гомдоод байв.",
-      icon: LogOut,
-      color: "bg-yellow-500",
-      textColor: "text-white",
-    },
   ];
   const canStart = roomData.players.length >= 2;
   const selectedGame = roomData.selectedGame;
