@@ -1,9 +1,11 @@
-"use client";
-
 import { useSearchParams } from "next/navigation";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
-export const ExcuseForm = () => {
+interface ExcuseFormProps {
+  onSuccess?: () => void;
+}
+
+export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
   const [reason, setReason] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -24,6 +26,20 @@ export const ExcuseForm = () => {
     setRoast(null);
     setStatusMessage(null);
 
+    if (!roomCode) {
+      setError("Өрөөний код олдсонгүй.");
+      setLoading(false);
+      return;
+    }
+
+    if (!reason || reason.trim() === "") {
+      setError("Шалтгаан бичих шаардлагатай.");
+      setLoading(false);
+      return;
+    }
+    console.log("roomCode:", roomCode);
+    console.log("reason:", reason);
+
     try {
       const response = await fetch(`http://localhost:4200/roast`, {
         method: "POST",
@@ -37,13 +53,15 @@ export const ExcuseForm = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        // Backend-ээс ирж байгаа message-г шууд харуулна
         setStatusMessage(data.message || "Roast авахад алдаа гарлаа");
       } else {
-        setReason("");
+        setReason(""); // Шалтгаан хоослоно
         if (data.roast) {
-          setRoast(data.roast);
+          setRoast(data.roast); // AI-ийн хариу
           setStatusMessage("Roast амжилттай үүслээ!");
+          if (onSuccess) {
+            onSuccess(); // ✅ зөв газар
+          }
         } else if (data.message) {
           setStatusMessage(data.message);
         }
@@ -85,6 +103,7 @@ export const ExcuseForm = () => {
             {statusMessage}
           </p>
         )}
+
         {roast && (
           <div className="mt-4 bg-yellow-50 border border-yellow-300 p-4 rounded-xl shadow">
             <h3 className="text-lg font-bold text-yellow-800 mb-2">

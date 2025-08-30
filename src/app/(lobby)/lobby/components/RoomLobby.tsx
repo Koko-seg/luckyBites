@@ -9,13 +9,23 @@ import ExcuseCard from "@/app/(lobby)/games/excuse/components/ExcuseCard";
 import { GameButton } from "./GameButton";
 import RaceGame from "@/app/(lobby)/games/runnerGame/page";
 import SpinWheelPage from "../../games/spin/page";
+import Lottie from "lottie-react";
+import globeAnimation from "@/animation/Loading Dots In Yellow.json";
 
 export const RoomLobby = () => {
   const data = useContext(RoomContext);
   const { roomData } = data || {};
 
   if (!roomData) {
-    return <div>Лобби ачааллаж байна...</div>;
+    return (
+      <div className="relative w-64 h-64 md:w-80 md:h-80">
+        <Lottie
+          animationData={globeAnimation}
+          loop={true}
+          className="absolute inset-0 text-purple-500"
+        />
+      </div>
+    );
   }
 
   const games = [
@@ -34,7 +44,7 @@ export const RoomLobby = () => {
       component: SpinWheelPage,
       description: "Өнөөдөр азтай өдөр чинь байх болов уу даа.",
       icon: LogOut,
-      color: "bg-pink-600",
+      color: "bg-orange-600",
       textColor: "text-white",
     },
     {
@@ -47,17 +57,15 @@ export const RoomLobby = () => {
       textColor: "text-white",
     },
   ];
-  
+
   const canStart = roomData.players.length >= 2;
   const selectedGame = roomData.selectedGame;
 
   if (roomData.gameStatus === "STARTED") {
-
     const CurrentGameComponent = games.find(
       (game) => game.id === roomData.currentGame
     )?.component;
 
- 
     if (CurrentGameComponent) {
       return <CurrentGameComponent />;
     }
@@ -68,21 +76,18 @@ export const RoomLobby = () => {
     <div className="min-h-screen bg-white p-2 flex flex-col items-center">
       <div className="w-full max-w-sm">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-1">
-         
-      
-          </div>
+          <div className="flex items-center gap-1"></div>
         </div>
         <div className="max-w-sm mx-auto">
           <RoomInfoCard />
-        <div className="text-center">
-        
-          <p className="text-sm italic text-purple-500">
-            Жич: Зөвхөн <span className="font-bold text-purple-800">Босс</span> л тоглоомоо сонгоно сорри 🙏
-          </p>
-        </div>
-            
-             
+          <div className="text-center">
+            <p className="text-sm italic text-purple-500">
+              Жич: Зөвхөн{" "}
+              <span className="font-bold text-purple-800">Босс</span> л
+              тоглоомоо сонгоно сорри 🙏
+            </p>
+          </div>
+
           <PlayerCardGeneral />
         </div>
         <div className="text-center mb-4">
@@ -97,13 +102,10 @@ export const RoomLobby = () => {
             ))}
           </div>
         </div>
-      <button
-
-              className="flex items-center gap-1 text-purple-700 hover:text-purple-800 font-medium transition-colors bg-purple-100/50 hover:bg-purple-100/80 px-2 py-1 rounded-full backdrop-blur-sm border border-purple-200 text-xs sm:text-sm"
-            >
-              <LogOut size={14} />
-              Өрөөнөөс гарах
-            </button>
+        <button className="flex items-center gap-1 text-purple-700 hover:text-purple-800 font-medium transition-colors bg-purple-100/50 hover:bg-purple-100/80 px-2 py-1 rounded-full backdrop-blur-sm border border-purple-200 text-xs sm:text-sm">
+          <LogOut size={14} />
+          Өрөөнөөс гарах
+        </button>
         <div className="mt-6 flex justify-center space-x-3">
           {["red", "yellow", "purp  le"].map((color, idx) => (
             <div
@@ -113,7 +115,6 @@ export const RoomLobby = () => {
             ></div>
           ))}
         </div>
-
       </div>
     </div>
   );

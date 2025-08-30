@@ -5,6 +5,9 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 import { io, Socket } from "socket.io-client";
 import { GameStatus } from "@/types/types";
+import Lottie from "lottie-react";
+import globeAnimation from "@/animation/Loading Dots In Yellow.json";
+import { CenteredAnimation } from "@/components/CenteredLoading";
 
 export type RoomData = {
   roomCode: string;
@@ -39,7 +42,6 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (!roomCode || !playerName) {
-      
       setErrorMessage("Өрөөний код эсвэл тоглогчийн нэр олдсонгүй.");
       setLoading(false);
       return;
@@ -80,9 +82,14 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
     };
   }, [roomCode, playerName, router]);
 
-  if (loading) return <div>Лобби ачааллаж байна...</div>;
+  if (loading)
+    return (
+      <div>
+        <CenteredAnimation />
+      </div>
+    );
   if (errorMessage) return <div>Алдаа гарлаа: {errorMessage}</div>;
-  if (roomData && roomData.players.length === 0) return <div>Тоглогч алга</div>;
+  // if (roomData && roomData.players.length === 0) return <div>Тоглогч алга</div>;
 
   return (
     <RoomContext.Provider

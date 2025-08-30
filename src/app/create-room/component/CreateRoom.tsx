@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ExcuseBackground } from "@/components/excuseBackground";
+import { IconBackground } from "@/components/IconBackground";
 
 interface CreateRoomFormProps {
   onRoomCreated?: (room: {
@@ -46,32 +47,36 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
         });
       }
 
-  
-     router.push(
+      router.push(
         `/lobby?roomId=${data.roomId}&roomCode=${data.roomCode}&playerName=${hostNickname}`
       );
     } catch (err: any) {
       const message = err.message || err;
-      setErrorMessage(typeof message === 'object' ? JSON.stringify(message) : message);
+      setErrorMessage(
+        typeof message === "object" ? JSON.stringify(message) : message
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
-      <ExcuseBackground/>
+    <div className="min-h-screen bg-gradient-to-br from-violet-200 to-orange-200 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
+      <ExcuseBackground />
+      <IconBackground />
+
       <form
-        className="bg-gray-50 p-8 w-full max-w-md rounded-xl shadow-lg"
         onSubmit={handleCreateRoom}
+        className="bg-white p-8 w-full max-w-md rounded-xl shadow-lg relative z-10"
       >
         <div className="items-center text-center mb-8">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-violet-700 mb-2 sm:mb-4 drop-shadow-2xl transform -rotate-2">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-violet-600 mb-2 sm:mb-4 drop-shadow-md transform -rotate-2">
             Өрөө
           </h1>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-gray-300 mb-2 drop-shadow-2xl transform rotate-1">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-yellow-400 mb-2 drop-shadow-md transform rotate-1 animate-pulse">
             Үүсгэх
           </h1>
+          <div className="w-60 sm:w-60 h-1 sm:h-1.5 bg-yellow-300 mx-auto rounded-full "></div>
         </div>
 
         <input
@@ -79,7 +84,7 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
           placeholder="Өрөөний нэр"
           value={roomName}
           onChange={(e) => setRoomName(e.target.value)}
-          className="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-300"
         />
 
         <input
@@ -87,7 +92,7 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
           placeholder="Нэрээ оруулна уу (Host)"
           value={hostNickname}
           onChange={(e) => setHostNickname(e.target.value)}
-          className="w-full mb-6 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-300"
         />
 
         <button

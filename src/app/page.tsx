@@ -7,6 +7,7 @@ import { AnimatedDotAll } from "@/components/AnimatedDot";
 import ActionButton from "@/components/ActionButton";
 import { Plus, Users } from "lucide-react";
 import { WhiteDot } from "@/components/WhiteDot";
+import { IconBackground } from "@/components/IconBackground";
 
 const Page = () => {
   const router = useRouter();
@@ -24,7 +25,8 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center  min-h-screen bg-white p-4">
+    <div className="flex flex-col items-center justify-center  min-h-screen bg-gradient-to-br from-orange-200 to-violet-100 p-4">
+      <IconBackground />
       <WhiteDot />
 
       <Header />
@@ -35,10 +37,10 @@ const Page = () => {
             icon={<Plus className="w-full h-full" />}
             text="  Өрөө Үүсгэх"
             textColor="text-white"
-            bgColor=" bg-violet-600"
-            hoverColor="hover:bg-violet-700"
-            borderColor="bg-violet-800"
-            hoverBorderColor="group-hover:bg-violet-900"
+            bgColor=" bg-orange-400"
+            hoverColor="hover:bg-yellow-500"
+            borderColor="bg-violet-200"
+            hoverBorderColor="group-hover:bg-orange-400"
           />
 
           <ActionButton
