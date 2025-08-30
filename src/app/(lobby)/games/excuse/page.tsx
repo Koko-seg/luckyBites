@@ -40,12 +40,7 @@ export const ExcuseSection: React.FC = () => {
   return (
     <div className="min-h-screen bg-white p-2 flex flex-col items-center">
       <div className="min-h-screen  flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
-        <button
-          className="absolute top-4 left-4 text-white bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg shadow-md transition-colors"
-          onClick={backLobby}
-        >
-          Lobby
-        </button>
+
         <ExcuseBackground />
         <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-xs sm:max-w-md w-full border border-purple-300">
           <ExcuseHeader />
@@ -63,10 +58,20 @@ export const ExcuseSection: React.FC = () => {
           ) : (
             <ExcuseForm onSuccess={() => setSubmitted(true)} />
           )}
-
+          <div className="flex justify-between px-6">
+            <div></div>
+            <button
+              className=" top-4 left-4 text-white bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg shadow-md transition-colors"
+              onClick={backLobby}
+            >
+              Lobby
+            </button>
+          </div>
           <AnimatedDotAll />
         </div>
+
       </div>
+
     </div>
   );
 };
