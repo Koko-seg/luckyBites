@@ -1,8 +1,10 @@
-import { useSearchParams } from "next/navigation";
-import React, { useState, ChangeEvent, FormEvent } from "react";
-
+"use client";
+ 
+import { RoomContext } from "@/context/roomContextTest";
+import React, { useState, ChangeEvent, FormEvent, useContext } from "react";
+ 
 interface ExcuseFormProps {
-  onSuccess?: () => void;
+  onSuccess?: () => void; // optional болгох эсвэл заавал гэж хүсвэл "?:"-ийг аваад ": () => void" гэж үлдээнэ
 }
 
 export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
@@ -11,57 +13,44 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
   const [error, setError] = useState<string>("");
   const [roast, setRoast] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
-
-  const searchParams = useSearchParams();
-  const roomCode = searchParams!.get("roomCode") as string;
-
+  const data = useContext(RoomContext);
+  const roomCode = data?.roomData?.roomCode;
+  
+  const socketId = data?.socket?.id;
+ 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setReason(e.target.value);
   };
-
+ 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!reason.trim()) return;
+ 
     setLoading(true);
     setError("");
     setRoast(null);
     setStatusMessage(null);
-
-    if (!roomCode) {
-      setError("Өрөөний код олдсонгүй.");
-      setLoading(false);
-      return;
-    }
-
-    if (!reason || reason.trim() === "") {
-      setError("Шалтгаан бичих шаардлагатай.");
-      setLoading(false);
-      return;
-    }
-    console.log("roomCode:", roomCode);
-    console.log("reason:", reason);
-
+ 
     try {
+      // Backend руу зөвхөн нэг reason илгээж байна
       const response = await fetch(`http://localhost:4200/roast`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           code: roomCode,
-          reasons: [reason],
+          players: [{ socketId, reason }],
         }),
       });
-
+ 
       const data = await response.json();
-
+ 
       if (!response.ok) {
         setStatusMessage(data.message || "Roast авахад алдаа гарлаа");
       } else {
-        setReason(""); // Шалтгаан хоослоно
+        setReason("");
         if (data.roast) {
-          setRoast(data.roast); // AI-ийн хариу
+          setRoast(data.roast);
           setStatusMessage("Roast амжилттай үүслээ!");
-          if (onSuccess) {
-            onSuccess(); // ✅ зөв газар
-          }
         } else if (data.message) {
           setStatusMessage(data.message);
         }
@@ -75,7 +64,7 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
     }
     setLoading(false);
   };
-
+  
   return (
     <div className="flex items-center justify-center p-6">
       <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
@@ -85,9 +74,10 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
             placeholder="Яагаад мөнгө төлөхгүй байгаа шалтгаанаа бич..."
             value={reason}
             onChange={handleChange}
-            required
             disabled={loading}
+            required
           />
+ 
           <button
             type="submit"
             disabled={loading || !reason.trim()}
@@ -97,13 +87,12 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
           </button>
           {error && <p className="text-red-600 text-center">{error}</p>}
         </form>
-
+ 
         {statusMessage && (
           <p className="text-blue-600 font-semibold text-center mt-4">
             {statusMessage}
           </p>
         )}
-
         {roast && (
           <div className="mt-4 bg-yellow-50 border border-yellow-300 p-4 rounded-xl shadow">
             <h3 className="text-lg font-bold text-yellow-800 mb-2">
@@ -116,3 +105,5 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
     </div>
   );
 };
+ 
+ 
