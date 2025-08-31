@@ -1,10 +1,11 @@
 "use client";
- 
+
+import type React from "react";
+import { useState, ChangeEvent, FormEvent, useContext } from "react";
 import { RoomContext } from "@/context/roomContextTest";
-import React, { useState, ChangeEvent, FormEvent, useContext } from "react";
- 
+
 interface ExcuseFormProps {
-  onSuccess?: () => void; // optional болгох эсвэл заавал гэж хүсвэл "?:"-ийг аваад ": () => void" гэж үлдээнэ
+  onSuccess?: () => void;
 }
 
 export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
@@ -15,24 +16,23 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const data = useContext(RoomContext);
   const roomCode = data?.roomData?.roomCode;
-  
+
   const socketId = data?.socket?.id;
- 
+
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setReason(e.target.value);
   };
- 
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!reason.trim()) return;
- 
+
     setLoading(true);
     setError("");
     setRoast(null);
     setStatusMessage(null);
- 
+
     try {
-      // Backend руу зөвхөн нэг reason илгээж байна
       const response = await fetch(`http://localhost:4200/roast`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -41,9 +41,9 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
           players: [{ socketId, reason }],
         }),
       });
- 
+
       const data = await response.json();
- 
+
       if (!response.ok) {
         setStatusMessage(data.message || "Roast авахад алдаа гарлаа");
       } else {
@@ -64,46 +64,47 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = ({ onSuccess }) => {
     }
     setLoading(false);
   };
-  
+
   return (
     <div className="flex items-center justify-center p-6">
-      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <textarea
-            className="w-full p-3 border rounded-xl resize-none h-24"
-            placeholder="Яагаад мөнгө төлөхгүй байгаа шалтгаанаа бич..."
-            value={reason}
-            onChange={handleChange}
-            disabled={loading}
-            required
-          />
- 
-          <button
-            type="submit"
-            disabled={loading || !reason.trim()}
-            className="w-full bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600"
-          >
-            {loading ? "Илгээж байна..." : "Шалтгаанаа илгээх"}
-          </button>
-          {error && <p className="text-red-600 text-center">{error}</p>}
-        </form>
- 
-        {statusMessage && (
-          <p className="text-blue-600 font-semibold text-center mt-4">
-            {statusMessage}
-          </p>
-        )}
-        {roast && (
-          <div className="mt-4 bg-yellow-50 border border-yellow-300 p-4 rounded-xl shadow">
-            <h3 className="text-lg font-bold text-yellow-800 mb-2">
-              🤖 AI Roast:
-            </h3>
-            <p className="italic text-gray-800">{roast}</p>
-          </div>
-        )}
+      {/* ✅ Энд гадна талын градиент хүрээний div-ийг нэмсэн */}
+      <div className="bg-gradient-to-br from-yellow-400 via-purple-500 to-blue-500 p-[2px] rounded-xl shadow-lg w-full max-w-md">
+        <div className="bg-white p-6 rounded-xl relative z-10 w-full">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <textarea
+              className="w-full p-3 border rounded-xl resize-none h-24 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Яагаад мөнгө төлөхгүй байгаа шалтгаанаа бич..."
+              value={reason}
+              onChange={handleChange}
+              disabled={loading}
+              required
+            />
+
+            <button
+              type="submit"
+              disabled={loading || !reason.trim()}
+              className="w-full bg-violet-500 text-white py-2 rounded-xl hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {loading ? "Илгээж байна..." : "Шалтгаанаа илгээх"}
+            </button>
+            {error && <p className="text-red-600 text-center">{error}</p>}
+          </form>
+
+          {statusMessage && (
+            <p className="text-blue-600 font-semibold text-center mt-4">
+              {statusMessage}
+            </p>
+          )}
+          {roast && (
+            <div className="mt-4 bg-yellow-50 border border-yellow-300 p-4 rounded-xl shadow">
+              <h3 className="text-lg font-bold text-yellow-800 mb-2">
+                🤖 AI Roast:
+              </h3>
+              <p className="italic text-gray-800">{roast}</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
- 
- 

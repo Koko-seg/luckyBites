@@ -42,11 +42,10 @@ export const GameButton: React.FC<GameButtonProps> = ({
     socket.emit("host:select_game", { roomCode, gameType: game.id });
   };
 
-  
   const buttonClasses = isSelected
     ? `${game.color} ${game.textColor} ring-4 ring-white ring-opacity-60`
     : `${game.color} ${game.textColor}`;
-console.log(game.color, game.textColor);
+  console.log(game.color, game.textColor);
 
   if (!isHost) {
     return (
@@ -69,7 +68,6 @@ console.log(game.color, game.textColor);
     );
   }
 
-  
   return (
     <div className="flex flex-col gap-2">
       <button

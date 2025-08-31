@@ -35,7 +35,7 @@ export const PlayerCardGeneral = () => {
 
   return (
     <div className="max-w-full mx-auto mb-4 p-4">
-      <h2 className="text-base font-bold text-purple-800 mb-4 text-center flex items-center justify-center gap-2">
+      <h2 className="text-base font-bold text-purple-700 mb-4 text-center flex items-center justify-center gap-2">
         <Users size={20} />
         Өрөөнд байгаа тоглогчид ({roomData?.players.length}/10)
       </h2>

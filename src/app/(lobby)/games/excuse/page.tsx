@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Loading Dots In Yellow.json";
 import { IconBackground } from "@/components/IconBackground";
+import { SquareArrowLeft } from "lucide-react";
 
 export const ExcuseSection: React.FC = () => {
   const router = useRouter();
@@ -33,45 +34,44 @@ export const ExcuseSection: React.FC = () => {
   }
   const backLobby = () => {
     if (!roomData || !playerName) return;
+
     router.push(
       `/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`
     );
   };
   return (
-    <div className="min-h-screen bg-white p-2 flex flex-col items-center">
-      <div className="min-h-screen  flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
-
-        <ExcuseBackground />
-        <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-xs sm:max-w-md w-full border border-purple-300">
-          <ExcuseHeader />
-          <h2 className="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6 text-purple-700 drop-shadow-sm">
-            Шалтаг аа бич📝 {playerName}
-          </h2>
-
-          {submitted ? (
-            <div className="text-center py-6 sm:py-8">
-              <p className="text-lg font-bold text-purple-600 mb-2 drop-shadow-sm">
-                Шалтаг амжилттай илгээгдлээ!
-              </p>
-              <p className="text-purple-500">Шалтагаа бичсэнд баярлалаа кк.</p>
-            </div>
-          ) : (
-            <ExcuseForm onSuccess={() => setSubmitted(true)} />
-          )}
-          <div className="flex justify-between px-6">
-            <div></div>
-            <button
-              className=" top-4 left-4 text-white bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg shadow-md transition-colors"
-              onClick={backLobby}
-            >
-              Lobby
-            </button>
-          </div>
-          <AnimatedDotAll />
+    <div className="min-h-screen p-8 bg-violet-200 flex flex-col items-center">
+      <ExcuseBackground />
+      <IconBackground />
+      <div className="flex justify-between w-full max-w-lg mb-6">
+        <div className="relative p-[2px] rounded-md bg-gradient-to-br from-orange-400 via-blue-400 to-violet-400">
+          <button
+            className="bg-violet-300 hover:bg-violet-400 px-4 py-2 rounded-md text-white flex items-center justify-center relative z-10"
+            onClick={backLobby}
+          >
+            <SquareArrowLeft />
+          </button>
         </div>
-
       </div>
+      <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-xs sm:max-w-md w-full border border-violet-300">
+        <ExcuseHeader />
+        <h2 className="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6 text-purple-700 drop-shadow-sm">
+          Шалтаг аа бич📝 {playerName}
+        </h2>
 
+        {submitted ? (
+          <div className="text-center py-6 sm:py-8">
+            <p className="text-lg font-bold text-purple-600 mb-2 drop-shadow-sm">
+              Шалтаг амжилттай илгээгдлээ!
+            </p>
+            <p className="text-purple-500">Шалтагаа бичсэнд баярлалаа кк.</p>
+          </div>
+        ) : (
+          <ExcuseForm onSuccess={() => setSubmitted(true)} />
+        )}
+        <div className="flex justify-between px-6"></div>
+        <AnimatedDotAll />
+      </div>
     </div>
   );
 };

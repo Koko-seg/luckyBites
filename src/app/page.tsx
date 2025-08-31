@@ -38,7 +38,7 @@ const Page = () => {
             text="  Өрөө Үүсгэх"
             textColor="text-white"
             bgColor=" bg-orange-400"
-            hoverColor="hover:bg-yellow-500"
+            hoverColor="hover:bg-orange-400"
             borderColor="bg-violet-200"
             hoverBorderColor="group-hover:bg-orange-400"
           />
@@ -50,7 +50,7 @@ const Page = () => {
             bgColor="bg-white"
             textColor="text-violet-600"
             hoverColor="hover:bg-white"
-            borderColor="bg-white"
+            borderColor="bg-orange-100"
             hoverBorderColor="group-hover:bg-white"
           />
         </div>

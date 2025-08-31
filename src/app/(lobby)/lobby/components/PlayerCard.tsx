@@ -5,7 +5,6 @@ import React from "react";
 import { X } from "lucide-react";
 import { PlayerCardProps } from "@/types/types";
 
-
 export const PlayerCard: React.FC<PlayerCardProps> = ({
   player,
   isCurrentUser,

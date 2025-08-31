@@ -11,6 +11,7 @@ import RaceGame from "@/app/(lobby)/games/runnerGame/page";
 import SpinWheelPage from "../../games/spin/page";
 import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Loading Dots In Yellow.json";
+import { AnimatedDotAll } from "@/components/AnimatedDot";
 
 export const RoomLobby = () => {
   const data = useContext(RoomContext);
@@ -106,15 +107,7 @@ export const RoomLobby = () => {
           <LogOut size={14} />
           Өрөөнөөс гарах
         </button>
-        <div className="mt-6 flex justify-center space-x-3">
-          {["red", "yellow", "purp  le"].map((color, idx) => (
-            <div
-              key={idx}
-              className={`w-4 h-4 bg-${color}-400 rounded-full animate-bounce opacity-60`}
-              style={{ animationDelay: `${idx * 0.2}s` }}
-            ></div>
-          ))}
-        </div>
+        <AnimatedDotAll />
       </div>
     </div>
   );
