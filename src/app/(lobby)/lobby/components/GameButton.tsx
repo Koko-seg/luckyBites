@@ -3,7 +3,6 @@
 
 import React, { useContext } from "react";
 import { RoomContext } from "@/context/roomContextTest";
-import { useRouter } from "next/navigation";
 
 interface GameProps {
   id: string;
@@ -26,7 +25,7 @@ export const GameButton: React.FC<GameButtonProps> = ({
   selectedGame,
 }) => {
   const data = useContext(RoomContext);
-  const router = useRouter();
+
 
   if (!data?.roomData || !data.playerName || !data.socket) return null;
 
@@ -45,49 +44,52 @@ export const GameButton: React.FC<GameButtonProps> = ({
   const buttonClasses = isSelected
     ? `${game.color} ${game.textColor} ring-4 ring-white ring-opacity-60`
     : `${game.color} ${game.textColor}`;
-  console.log(game.color, game.textColor);
 
   if (!isHost) {
     return (
       <div
-        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 opacity-60`}
+        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 opacity-60 `}
       >
-        <div className="flex flex-col items-center text-center">
-          <div className="mb-4 p-4 bg-white/30 rounded-2xl">
+        <div className="flex items-center text-center">
+          <div>
+            <h3 className="text-2xl font-black mb-2">{game.name}</h3>
+            <p className="text-lg font-medium opacity-90">{game.description}</p>
+          </div>
+          <div className="mb-4 p-4 bg-white/30 rounded-2xl group-hover:bg-white/40 transition-colors">
             <IconComponent size={48} className="mx-auto" />
           </div>
-          <h3 className="text-2xl font-black mb-2">{game.name}</h3>
-          <p className="text-lg font-medium opacity-90">{game.description}</p>
-          {isSelected && (
-            <div className="mt-2 text-sm font-bold bg-white/50 px-3 py-1 rounded-full">
-              СОНГОГДСОН
-            </div>
-          )}
         </div>
+        {isSelected && (
+          <div className="mt-2 text-sm font-bold bg-white/50 px-3 py-1 rounded-full">
+            СОНГОГДСОН
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="">
       <button
         onClick={handleGameSelect}
-        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
-          !canStart ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${!canStart ? "opacity-50 cursor-not-allowed" : ""
+          }`}
       >
-        <div className="flex flex-col items-center text-center">
+        <div className="flex items-center text-center">
+          <div>
+            <h3 className="text-2xl font-black mb-2">{game.name}</h3>
+            <p className="text-lg font-medium opacity-90">{game.description}</p>
+          </div>
           <div className="mb-4 p-4 bg-white/30 rounded-2xl group-hover:bg-white/40 transition-colors">
             <IconComponent size={48} className="mx-auto" />
           </div>
-          <h3 className="text-2xl font-black mb-2">{game.name}</h3>
-          <p className="text-lg font-medium opacity-90">{game.description}</p>
-          {isSelected && (
-            <div className="mt-2 text-sm font-bold bg-white/50 px-3 py-1 rounded-full">
-              СОНГОГДСОН
-            </div>
-          )}
+
         </div>
+        {isSelected && (
+          <div className="mt-2 text-sm font-bold bg-white/50 px-3 py-1 rounded-full">
+            СОНГОГДСОН
+          </div>
+        )}
       </button>
 
       {/* Game эхлүүлэх товч зөвхөн сонгогдсон game-д */}

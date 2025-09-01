@@ -3,17 +3,20 @@
 import React, { useState, useContext, useEffect, ChangeEvent, FormEvent } from "react";
 import { RoomContext } from "@/context/roomContextTest";
 
-export const ExcuseForm = () => {
+interface ExcuseFormProps {
+  onSuccess?: () => void; // ✅ onSuccess prop нэмсэн
+}
+
+export const ExcuseForm: React.FC<ExcuseFormProps> = () => {
   const data = useContext(RoomContext);
   const roomCode = data?.roomData?.roomCode;
   const socket = data?.socket;
-  const playerName = data?.playerName; // context-д хадгалсан player name
 
   const [reason, setReason] = useState("");
   const [allReasons, setAllReasons] = useState<{ socketId: string; reason: string }[]>([]);
   const [timer, setTimer] = useState<number | null>(null);
   const [roast, setRoast] = useState<string | null>(null);
-  const [chosen, setChosen] = useState<string | null>(null);
+
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => setReason(e.target.value);
 
@@ -35,9 +38,9 @@ export const ExcuseForm = () => {
 
     socket.on("roast:timer_finished", () => setTimer(0));
 
-    socket.on("roast:result", ({ roast, chosen }) => {
+    socket.on("roast:result", ({ roast }) => {
       setRoast(roast);
-      setChosen(chosen);
+     
     });
 
     return () => {

@@ -29,7 +29,7 @@ export const PlayerCardGeneral = () => {
 
   const isHost = (name: string) => roomData?.host === name;
 
-  const handleRemovePlayer = (playerNameToRemove: string) => {
+  const handleRemovePlayer = () => {
     if (!isCurrentUserHost) return;
   };
 
@@ -40,7 +40,7 @@ export const PlayerCardGeneral = () => {
         Өрөөнд байгаа тоглогчид ({roomData?.players.length}/10)
       </h2>
       <div className="grid grid-cols-2 gap-4">
-        {players.map((player, index) => (
+        {players.map((player) => (
           <PlayerCard
             key={player.id}
             player={player}

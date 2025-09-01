@@ -33,7 +33,12 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
         body: JSON.stringify({ roomName, hostNickname }),
       });
 
-      const data = await response.json();
+      const data: {
+        roomName: string;
+        roomCode: string;
+        roomId: number;
+        message?: string;
+      } = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || "Өрөө үүсгэхэд алдаа гарлаа");
@@ -50,11 +55,16 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
       router.push(
         `/lobby?roomId=${data.roomId}&roomCode=${data.roomCode}&playerName=${hostNickname}`
       );
-    } catch (err: any) {
-      const message = err.message || err;
-      setErrorMessage(
-        typeof message === "object" ? JSON.stringify(message) : message
-      );
+    } catch (err: unknown) {
+      let message = "Алдаа гарлаа";
+      if (err instanceof Error) {
+        message = err.message;
+      } else if (typeof err === "string") {
+        message = err;
+      } else {
+        message = JSON.stringify(err);
+      }
+      setErrorMessage(message);
     } finally {
       setIsLoading(false);
     }

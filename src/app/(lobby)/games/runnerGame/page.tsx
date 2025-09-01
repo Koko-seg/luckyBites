@@ -14,24 +14,8 @@ const RunnerGame: React.FC = () => {
   const { roomData, socket, playerName } = data || {};
 
   const [gameStarted, setGameStarted] = useState(false);
-  const [playersPositions, setPlayersPositions] = useState<
-    Record<string, number>
-  >({});
+  const [playersPositions, setPlayersPositions] = useState<Record<string, number>>({});
   const [winner, setWinner] = useState<string | null>(null);
-
-  if (!socket || !roomData || !playerName) {
-    return (
-      <div>
-        <div className="relative w-64 h-64 md:w-80 md:h-80">
-          <Lottie
-            animationData={globeAnimation}
-            loop={true}
-            className="absolute inset-0 text-purple-500"
-          />
-        </div>
-      </div>
-    );
-  }
 
   // --- Socket listener ---
   useEffect(() => {
@@ -55,20 +39,23 @@ const RunnerGame: React.FC = () => {
 
   // --- Initialize positions on roomData change ---
   useEffect(() => {
+    if (!roomData?.players) return;
+
     const initialPositions: Record<string, number> = {};
     roomData.players.forEach((p) => (initialPositions[p] = 0));
     setPlayersPositions(initialPositions);
     setWinner(null);
     setGameStarted(false);
-  }, [roomData.players]);
+  }, [roomData?.players]);
 
-  // --- Move forward ---
   const moveForward = () => {
+    if (!roomData || !socket || !playerName) return;
+
     if (!gameStarted) setGameStarted(true);
 
-    const currentPos = playersPositions[playerName!] || 0;
+    const currentPos = playersPositions[playerName] || 0;
     const newPos = Math.min(currentPos + 5, 100);
-    const updatedPositions = { ...playersPositions, [playerName!]: newPos };
+    const updatedPositions = { ...playersPositions, [playerName]: newPos };
     setPlayersPositions(updatedPositions);
 
     socket.emit("runner:update_positions", {
@@ -86,10 +73,19 @@ const RunnerGame: React.FC = () => {
   };
 
   const backLobby = () => {
-    router.push(
-      `/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`
-    );
+    if (!roomData || !playerName) return;
+    router.push(`/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`);
   };
+
+  if (!socket || !roomData || !playerName) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="relative w-64 h-64 md:w-80 md:h-80">
+          <Lottie animationData={globeAnimation} loop={true} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-8 bg-blue-200 flex flex-col items-center">
@@ -107,12 +103,8 @@ const RunnerGame: React.FC = () => {
 
       {winner ? (
         <div className="text-center p-8 bg-blue-400 rounded-xl shadow-lg ">
-          <div className="relative w-64 h-64 md:w-80 md:h-80   mx-auto">
-            <Lottie
-              animationData={globeAnimation}
-              loop={true}
-              className="absolute inset-0"
-            />
+          <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
+            <Lottie animationData={globeAnimation} loop={true} />
           </div>
           <h1 className="text-4xl font-bold mb-4">
             🎉 {winner} 🎉
@@ -128,30 +120,20 @@ const RunnerGame: React.FC = () => {
             </h1>
           )}
 
-          {/* roomData.players ашиглан map */}
           {roomData.players.map((name) => {
             const progress = playersPositions[name] || 0;
             return (
-              <div
-                key={name}
-                className="w-full bg-white rounded-full h-6 relative"
-              >
+              <div key={name} className="w-full bg-white rounded-full h-6 relative">
                 <div
                   className={`h-6 rounded-full transition-all duration-500 ${
                     name === playerName ? "bg-blue-500" : "bg-gray-400"
                   }`}
                   style={{ width: `${progress}%` }}
                 />
-                <span className="absolute left-2 top-0 text-sm font-bold z-10">
-                  {name}
-                </span>
-
+                <span className="absolute left-2 top-0 text-sm font-bold z-10">{name}</span>
                 <span
                   className="absolute top-1/2 -translate-y-1/2 z-20 transition-all duration-500 text-sm"
-                  style={{
-                    left: `${progress}%`,
-                    transform: "translateX(-50%)",
-                  }}
+                  style={{ left: `${progress}%`, transform: "translateX(-50%)" }}
                 >
                   🐌
                 </span>
