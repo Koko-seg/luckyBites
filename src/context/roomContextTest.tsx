@@ -2,11 +2,8 @@
 
 import React, { useEffect, useState, createContext, useContext } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-
 import { io, Socket } from "socket.io-client";
 import { GameStatus } from "@/types/types";
-import Lottie from "lottie-react";
-import globeAnimation from "@/animation/Loading Dots In Yellow.json";
 import { CenteredAnimation } from "@/components/CenteredLoading";
 
 export type RoomData = {
@@ -63,10 +60,9 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
 
-    const handleJoinError = ({ message }: { message: any }) => {
-      setErrorMessage(
-        typeof message === "object" ? JSON.stringify(message) : message
-      );
+    const handleJoinError = (payload: { message: string | object }) => {
+      const { message } = payload;
+      setErrorMessage(typeof message === "object" ? JSON.stringify(message) : message);
       setLoading(false);
     };
 
@@ -88,8 +84,9 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
         <CenteredAnimation />
       </div>
     );
-  if (errorMessage) return <div>Алдаа гарлаа: {errorMessage}</div>;
-  // if (roomData && roomData.players.length === 0) return <div>Тоглогч алга</div>;
+
+  if (errorMessage)
+    return <div>Алдаа гарлаа: {errorMessage}</div>;
 
   return (
     <RoomContext.Provider
@@ -103,12 +100,13 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
 // Custom hook for convenience
 export const useRoom = () => useContext(RoomContext);
 
+// --- Singleton Socket ---
 let socket: Socket | null = null;
 
 export const getRoomSocket = (): Socket => {
   if (!socket) {
     socket = io("http://localhost:4200", {
-      transports: ["websocket"], // duplicate connect багасгана
+      transports: ["websocket"],
     });
 
     socket.on("connect", () => {

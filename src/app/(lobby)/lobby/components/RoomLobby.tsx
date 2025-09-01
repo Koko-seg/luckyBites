@@ -1,4 +1,4 @@
-import { ArrowLeft, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import { useContext } from "react";
 
@@ -91,18 +91,15 @@ export const RoomLobby = () => {
 
           <PlayerCardGeneral />
         </div>
-        <div className="text-center mb-4">
-          <div className="grid grid-cols-1 gap-3 max-w-sm mx-auto">
-            {games.map((game) => (
-              <GameButton
-                key={game.id}
-                game={game}
-                canStart={canStart}
-                selectedGame={selectedGame}
-              />
-            ))}
-          </div>
-        </div>
+        {games.map((game) => (
+          <GameButton
+            key={game.id}
+            game={game}
+            canStart={canStart}
+            selectedGame={selectedGame}
+
+          />
+        ))}
         <button className="flex items-center gap-1 text-purple-700 hover:text-purple-800 font-medium transition-colors bg-purple-100/50 hover:bg-purple-100/80 px-2 py-1 rounded-full backdrop-blur-sm border border-purple-200 text-xs sm:text-sm">
           <LogOut size={14} />
           Өрөөнөөс гарах

@@ -1,50 +1,46 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import io, { Socket } from "socket.io-client";
 import { ExcuseBackground } from "@/components/excuseBackground";
 import { IconBackground } from "@/components/IconBackground";
 
+interface AutoJoinResponse {
+  code: string;
+  players: { id: string; name: string }[];
+}
+
 let socket: Socket;
 
 export default function JoinRoom() {
-  const router = useRouter();
   const [roomCode, setRoomCode] = useState("");
   const [nickname, setNickname] = useState("");
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [player, setPlayers] = useState("");
-  const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {
     socket = io("http://localhost:4200");
 
-    socket.on("roomData", (data) => {
-      console.log("Room data:", data);
-
+    socket.on("roomData", (data: { roomCode: string }) => {
       setIsConnecting(false);
       window.location.href = `/lobby?roomCode=${data.roomCode}&playerName=${nickname}`;
     });
 
-    socket.on("joinError", ({ message }) => {
+    socket.on("joinError", ({ message }: { message: string }) => {
       setErrorMessage(message);
       setIsConnecting(false);
     });
 
-    socket.on("connect_error", (err) => {
+    socket.on("connect_error", (err: Error) => {
       console.error("Connection error:", err);
       setErrorMessage("Socket холболт үүсгэж чадсангүй.");
       setIsConnecting(false);
     });
 
     return () => {
-      if (socket) {
-        socket.disconnect();
-      }
+      if (socket) socket.disconnect();
     };
-  }, [router, nickname]);
+  }, [nickname]);
 
   const handleJoinRoom = () => {
     if (!roomCode || !nickname) {
@@ -56,27 +52,22 @@ export default function JoinRoom() {
     setIsConnecting(true);
 
     socket.emit("joinRoom", { roomCode, playerName: nickname });
-    socket.emit("autoJoin", { nickname }, (res: any) => {
-      setPlayers(res.players);
+    socket.emit("autoJoin", { nickname }, (res: AutoJoinResponse) => {
       setRoomCode(res.code);
-
-      if (res.players[0].id === socket.id) setIsHost(true);
     });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-200 to-orange-200 flex items-center justify-center p-4 sm:p-6 lg:p-8 relative">
       <ExcuseBackground />
-      {/* ✅ IconBackground-ийн z-index-ийг Forms-оос бага байхаар тохируулсан */}
       <IconBackground />
 
       <form
-        // ✅ Forms-ийн z-index-ийг нэмж, icons-оос дээгүүр байрлуулсан
         onSubmit={(e) => {
           e.preventDefault();
           handleJoinRoom();
         }}
-        className="bg-white p-8 w-full max-w-md rounded-xl shadow-lg relative z-10" // ✅ z-10 нэмсэн
+        className="bg-white p-8 w-full max-w-md rounded-xl shadow-lg relative z-10"
       >
         <div className="items-center text-center mb-8">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-7xl font-black text-violet-600  mb-2 sm:mb-4 drop-shadow-md transform -rotate-2">
