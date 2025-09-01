@@ -193,9 +193,9 @@ export default function SpinWheelPage() {
               <h2 className="text-2xl font-bold text-orange-700 dark:text-orange-300 mb-2">
                 Азтай золиг вэ чи!
               </h2>
-              <p className="text-xl font-bold text-yellow-500 dark:text-yellow-300 bg-white dark:bg-slate-800 px-6 py-3 rounded-full shadow-md">
+              <div className="text-xl font-bold text-yellow-500 dark:text-yellow-300 bg-white dark:bg-slate-800 px-6 py-3 rounded-full shadow-md">
                 🎉 {winner} 🎉
-              </p>
+              </div>
             </div>
           )}
         </CardContent>

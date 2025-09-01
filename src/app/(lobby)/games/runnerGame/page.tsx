@@ -106,10 +106,10 @@ const RunnerGame: React.FC = () => {
           <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
             <Lottie animationData={globeAnimation} loop={true} />
           </div>
-          <h1 className="text-4xl font-bold mb-4">
+          <div className="text-4xl font-bold mb-4">
             🎉 {winner} 🎉
             <h1>Чи ч хурдан 🐌 юм даа!</h1>
-          </h1>
+          </div>
         </div>
       ) : (
         <div className="w-full max-w-lg space-y-4">
@@ -125,9 +125,8 @@ const RunnerGame: React.FC = () => {
             return (
               <div key={name} className="w-full bg-white rounded-full h-6 relative">
                 <div
-                  className={`h-6 rounded-full transition-all duration-500 ${
-                    name === playerName ? "bg-blue-500" : "bg-gray-400"
-                  }`}
+                  className={`h-6 rounded-full transition-all duration-500 ${name === playerName ? "bg-blue-500" : "bg-gray-400"
+                    }`}
                   style={{ width: `${progress}%` }}
                 />
                 <span className="absolute left-2 top-0 text-sm font-bold z-10">{name}</span>
