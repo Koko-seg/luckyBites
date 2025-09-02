@@ -12,6 +12,7 @@ import SpinWheelPage from "../../games/spin/page";
 import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Loading Dots In Yellow.json";
 import { AnimatedDotAll } from "@/components/AnimatedDot";
+import RunnerGame from "../../games/runnerGame/components/RunnerGame";
 
 export const RoomLobby = () => {
   const data = useContext(RoomContext);
@@ -51,7 +52,7 @@ export const RoomLobby = () => {
     {
       id: "runnerGame",
       name: "Уралдах уу",
-      component: RaceGame,
+      component: RunnerGame,
       description: "Гэхдээ ухаанаараа биш шүү хаха.",
       icon: LogOut,
       color: "bg-green-500",
@@ -97,7 +98,6 @@ export const RoomLobby = () => {
             game={game}
             canStart={canStart}
             selectedGame={selectedGame}
-
           />
         ))}
         <button className="flex items-center gap-1 text-purple-700 hover:text-purple-800 font-medium transition-colors bg-purple-100/50 hover:bg-purple-100/80 px-2 py-1 rounded-full backdrop-blur-sm border border-purple-200 text-xs sm:text-sm">

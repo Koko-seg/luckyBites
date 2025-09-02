@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useContext, useEffect, ChangeEvent, FormEvent } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+} from "react";
 import { RoomContext } from "@/context/roomContextTest";
 
 interface ExcuseFormProps {
@@ -13,12 +19,14 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = () => {
   const socket = data?.socket;
 
   const [reason, setReason] = useState("");
-  const [allReasons, setAllReasons] = useState<{ socketId: string; reason: string }[]>([]);
+  const [allReasons, setAllReasons] = useState<
+    { socketId: string; reason: string }[]
+  >([]);
   const [timer, setTimer] = useState<number | null>(null);
   const [roast, setRoast] = useState<string | null>(null);
 
-
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => setReason(e.target.value);
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
+    setReason(e.target.value);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -40,7 +48,6 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = () => {
 
     socket.on("roast:result", ({ roast }) => {
       setRoast(roast);
-     
     });
 
     return () => {
