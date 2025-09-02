@@ -106,7 +106,7 @@ let socket: Socket | null = null;
 
 export const getRoomSocket = (): Socket => {
   if (!socket) {
-    socket = io("http://who-pays-backend.vercel.app", {
+    socket = io("http://localhost:4200", {
       transports: ["websocket"],
     });
 

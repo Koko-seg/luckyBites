@@ -8,6 +8,8 @@ import { ExcuseBackground } from "@/components/excuseBackground";
 import { IconBackground } from "@/components/IconBackground";
 import { SquareArrowLeft } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Lottie from "lottie-react";
+import globeAnimation from "@/animation/Confetti.json";
 
 export function SpinWheelPage() {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -58,7 +60,7 @@ export function SpinWheelPage() {
       setTimeout(() => {
         setWinner(winner);
         setIsSpinning(false);
-      }, 3000);
+      }, 10000);
     };
 
     socket.on("spinUpdate", handleSpinUpdate);
@@ -123,7 +125,7 @@ export function SpinWheelPage() {
       <Card className="w-full max-w-md sm:max-w-2xl shadow-2xl border-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
         <CardHeader className="text-center pb-4">
           <CardTitle className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-500 bg-clip-text text-transparent">
-            Хэн нь азтайгаа үзэх үү?
+            Хэний данс өнөөдөр амрах вэ?
           </CardTitle>
         </CardHeader>
 
@@ -138,6 +140,7 @@ export function SpinWheelPage() {
               className="relative w-72 h-72 sm:w-96 sm:h-96 rounded-full overflow-hidden transition-transform duration-[3000ms] ease-out shadow-2xl ring-8 ring-white dark:ring-slate-700"
               style={{
                 transform: `rotate(${rotation}deg)`,
+                transition: "transform 10s cubic-bezier(0, 1, 0.25, 1)",
                 background: `conic-gradient(${WHEEL_SEGMENTS.map(
                   (s, i) =>
                     `${s.color} ${i * (360 / WHEEL_SEGMENTS.length)}deg, ${
@@ -196,13 +199,20 @@ export function SpinWheelPage() {
               ? isSpinning
                 ? "🎯 эргэж байна..."
                 : "🎲 Эргүүлнэ үү!"
-              : "👑 Host л эргүүлнэ"}
+              : "👑 Босс чинь л эргүүлнэ дээ"}
           </Button>
 
           {/* Winner */}
           {!isSpinning && winner && (
             <div className="text-center p-8 bg-gradient-to-r from-orange-50 to-indigo-50 dark:from-orange-900/20 dark:to-indigo-900/20 rounded-2xl border-2 border-orange-200 dark:border-orange-700 shadow-lg">
-              <div className="text-6xl mb-4">🎉</div>
+              <div className="text-6xl mb-4">
+                🎉
+                <Lottie
+                  animationData={globeAnimation}
+                  loop={true}
+                  className="absolute inset-0 text-purple-500"
+                />
+              </div>
               <h2 className="text-2xl font-bold text-orange-700 dark:text-orange-300 mb-2">
                 Азтай золиг вэ чи!
               </h2>

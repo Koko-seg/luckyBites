@@ -2,15 +2,13 @@
 
 import React from "react";
 
-import { X } from "lucide-react";
+// import { X } from "lucide-react";
 import { PlayerCardProps } from "@/types/types";
 
 export const PlayerCard: React.FC<PlayerCardProps> = ({
   player,
   isCurrentUser,
   isHost,
-  isCurrentUserHost,
-  onRemove,
 }) => {
   return (
     <div
@@ -23,16 +21,6 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
       } text-center transform hover:scale-105 transition-all duration-200 relative`}
     >
       <div className="">
-        {isCurrentUserHost && !isHost && !isCurrentUser && (
-          <button
-            onClick={() => onRemove && onRemove(player.name)}
-            className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-colors"
-            title="Remove player"
-          >
-            <X size={14} />
-          </button>
-        )}
-
         <div
           className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br ${
             isHost

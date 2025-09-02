@@ -11,10 +11,14 @@ import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Loading Dots In Yellow.json";
 import { AnimatedDotAll } from "@/components/AnimatedDot";
 import RunnerGame from "../../games/runnerGame/components/RunnerGame";
+import { useRouter } from "next/navigation";
 
 export const RoomLobby = () => {
   const data = useContext(RoomContext);
-  const { roomData } = data || {};
+  // const { roomData } = data || {};
+  const { roomData, socket, playerName } = data || {};
+
+  const router = useRouter();
 
   if (!roomData) {
     return (
@@ -31,29 +35,29 @@ export const RoomLobby = () => {
   const games = [
     {
       id: "excuse",
-      name: "Шалтаг тоочье",
+      name: "Шалтаг тоочих уу?",
       component: ExcuseCard,
-      description: "Хэн нь сайн шалтаг тоочих вэ?.",
-      icon: LogOut,
-      color: "bg-purple-600",
+      description: "Хэн нь сайн шалтаг тоочих вэ?",
+      icon: "/word-of-mouth.png",
+      color: "bg-purple-500",
       textColor: "text-white",
     },
     {
       id: "spin",
-      name: "Азаа үзье",
+      name: "Азаа үзэх үү?",
       component: SpinWheelPage,
       description: "Өнөөдөр азтай өдөр чинь байх болов уу даа.",
-      icon: LogOut,
-      color: "bg-orange-600",
+      icon: "/spin.png",
+      color: "bg-orange-500",
       textColor: "text-white",
     },
     {
       id: "runnerGame",
-      name: "Уралдах уу",
+      name: "Уралдах уу?",
       component: RunnerGame,
-      description: "Гэхдээ ухаанаараа биш шүү хаха.",
-      icon: LogOut,
-      color: "bg-green-500",
+      description: "Гэхдээ ухаанаараа биш шүү.",
+      icon: "/snail.png",
+      color: "bg-blue-500",
       textColor: "text-white",
     },
   ];
@@ -71,7 +75,15 @@ export const RoomLobby = () => {
     }
     return <div>Тоглоом олдсонгүй!</div>;
   }
-
+  const handleLeaveRoom = () => {
+    if (socket && playerName && roomData.roomCode) {
+      socket.emit("leaveRoom", {
+        roomCode: roomData.roomCode,
+        playerName: playerName,
+      });
+      router.push("/"); // Хэрэглэгчийг үндсэн хуудас руу шилжүүлнэ
+    }
+  };
   return (
     <div className="min-h-screen bg-white p-2 flex flex-col items-center">
       <div className="w-full max-w-sm">
@@ -98,10 +110,15 @@ export const RoomLobby = () => {
             selectedGame={selectedGame}
           />
         ))}
-        <button className="flex items-center gap-1 text-purple-700 hover:text-purple-800 font-medium transition-colors bg-purple-100/50 hover:bg-purple-100/80 px-2 py-1 rounded-full backdrop-blur-sm border border-purple-200 text-xs sm:text-sm">
-          <LogOut size={14} />
-          Өрөөнөөс гарах
-        </button>
+        <div className="w-full mt-8 flex">
+          <button
+            onClick={handleLeaveRoom}
+            className="flex items-center gap-1 text-purple-700 hover:text-purple-800 font-medium transition-colors bg-purple-100/50 hover:bg-purple-100/80 px-2 py-1 rounded-full backdrop-blur-sm border border-purple-200 text-xs sm:text-sm"
+          >
+            <LogOut size={14} />
+            Өрөөнөөс гарах
+          </button>
+        </div>
         <AnimatedDotAll />
       </div>
     </div>

@@ -1,14 +1,21 @@
 // GameButton.tsx
+
 "use client";
 
 import React, { useContext } from "react";
 import { RoomContext } from "@/context/roomContextTest";
+import Image from "next/image";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
+// GameProps-ийн icon талбарыг string-ээр өргөтгөв
 interface GameProps {
   id: string;
   name: string;
   description: string;
-  icon: React.ComponentType<{ size: number; className?: string }>;
+  icon:
+    | React.ComponentType<{ size: number; className?: string }>
+    | string
+    | StaticImport;
   color: string;
   textColor: string;
 }
@@ -18,6 +25,34 @@ interface GameButtonProps {
   canStart: boolean;
   selectedGame: string | null;
 }
+
+const GameIcon = ({
+  icon,
+  name,
+}: {
+  icon: GameProps["icon"];
+  name: string;
+}) => {
+  const isImage = typeof icon === "string";
+  const IconComponent = icon as React.ComponentType<{
+    size: number;
+    className?: string;
+  }>;
+
+  if (isImage) {
+    return (
+      <Image
+        src={icon as string | StaticImport}
+        alt={name}
+        width={48}
+        height={48}
+        className="mx-auto"
+      />
+    );
+  } else {
+    return <IconComponent size={48} className="mx-auto" />;
+  }
+};
 
 export const GameButton: React.FC<GameButtonProps> = ({
   game,
@@ -29,14 +64,13 @@ export const GameButton: React.FC<GameButtonProps> = ({
   if (!data?.roomData || !data.playerName || !data.socket) return null;
 
   const { roomData, playerName, socket } = data;
-  const { roomCode, players } = roomData;
-  const isHost = playerName === players[0];
+  const { roomCode } = roomData;
+
+  const isHost = playerName === roomData.host;
   const isSelected = selectedGame === game.id;
-  const IconComponent = game.icon;
 
   const handleGameSelect = () => {
     if (!isHost || !socket) return;
-
     socket.emit("host:select_game", { roomCode, gameType: game.id });
   };
 
@@ -44,20 +78,24 @@ export const GameButton: React.FC<GameButtonProps> = ({
     ? `${game.color} ${game.textColor} ring-4 ring-white ring-opacity-60`
     : `${game.color} ${game.textColor}`;
 
+  const content = (
+    <div className="flex items-center text-center">
+      <div>
+        <h3 className="text-2xl font-black mb-2">{game.name}</h3>
+        <p className="text-lg font-medium opacity-90">{game.description}</p>
+      </div>
+      <div className="mb-4 p-4 bg-white/30 rounded-2xl group-hover:bg-white/40 transition-colors">
+        <GameIcon icon={game.icon} name={game.name} />
+      </div>
+    </div>
+  );
+
   if (!isHost) {
     return (
       <div
         className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 opacity-60 `}
       >
-        <div className="flex items-center text-center">
-          <div>
-            <h3 className="text-2xl font-black mb-2">{game.name}</h3>
-            <p className="text-lg font-medium opacity-90">{game.description}</p>
-          </div>
-          <div className="mb-4 p-4 bg-white/30 rounded-2xl group-hover:bg-white/40 transition-colors">
-            <IconComponent size={48} className="mx-auto" />
-          </div>
-        </div>
+        {content}
         {isSelected && (
           <div className="mt-2 text-sm font-bold bg-white/50 px-3 py-1 rounded-full">
             СОНГОГДСОН
@@ -75,15 +113,7 @@ export const GameButton: React.FC<GameButtonProps> = ({
           !canStart ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
-        <div className="flex items-center text-center">
-          <div>
-            <h3 className="text-2xl font-black mb-2">{game.name}</h3>
-            <p className="text-lg font-medium opacity-90">{game.description}</p>
-          </div>
-          <div className="mb-4 p-4 bg-white/30 rounded-2xl group-hover:bg-white/40 transition-colors">
-            <IconComponent size={48} className="mx-auto" />
-          </div>
-        </div>
+        {content}
         {isSelected && (
           <div className="mt-2 text-sm font-bold bg-white/50 px-3 py-1 rounded-full">
             СОНГОГДСОН

@@ -4,56 +4,99 @@ import { IconBackground } from "@/components/IconBackground";
 import { RoomContext } from "@/context/roomContextTest";
 import { SquareArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Confetti.json";
 
-export const RunnerGame: React.FC = () => {
+const RunnerGame: React.FC = () => {
   const router = useRouter();
   const data = useContext(RoomContext);
-  const { roomData, socket, playerName } = data || {};
 
   const [gameStarted, setGameStarted] = useState(false);
   const [playersPositions, setPlayersPositions] = useState<
     Record<string, number>
   >({});
   const [winner, setWinner] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState(3);
+  const [isCounting, setIsCounting] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // --- Socket listener ---
+  const roomData = data?.roomData;
+  const socket = data?.socket;
+  const playerName = data?.playerName;
+  const isHost = playerName && roomData ? roomData.host === playerName : false;
+
   useEffect(() => {
     if (!socket) return;
 
     const handlePositions = (positions: Record<string, number>) =>
       setPlayersPositions(positions);
+    const handleStart = () => {
+      setIsCounting(true);
+      setGameStarted(false);
+    };
     const handleFinish = ({ winner }: { winner: string }) => {
       setWinner(winner);
       setGameStarted(false);
+      setIsCounting(false);
+      setCountdown(3);
     };
 
     socket.on("runner:update_positions", handlePositions);
+
+    socket.on("runner:start_game", handleStart);
     socket.on("runner:finish", handleFinish);
 
     return () => {
       socket.off("runner:update_positions", handlePositions);
+      socket.off("runner:start_game", handleStart);
       socket.off("runner:finish", handleFinish);
     };
   }, [socket]);
 
-  // --- Initialize positions on roomData change ---
+  // Reset game state when players change
   useEffect(() => {
-    if (!roomData?.players) return;
-
+    if (!roomData || !roomData.players) return;
     const initialPositions: Record<string, number> = {};
     roomData.players.forEach((p) => (initialPositions[p] = 0));
     setPlayersPositions(initialPositions);
     setWinner(null);
     setGameStarted(false);
-  }, [roomData?.players]);
+    setCountdown(3);
+    setIsCounting(false);
+  }, [roomData]);
+
+  // Countdown logic
+  useEffect(() => {
+    if (isCounting) {
+      const intervalId = setInterval(() => {
+        setCountdown((prevCount) => {
+          if (prevCount <= 1) {
+            clearInterval(intervalId);
+            setIsCounting(false);
+            setGameStarted(true);
+            return 0;
+          }
+          return prevCount - 1;
+        });
+      }, 1000);
+      timerRef.current = intervalId;
+    }
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isCounting]);
+
+  const startGame = () => {
+    if (!isHost || !socket || !roomData || gameStarted || isCounting) return;
+
+    socket.emit("runner:start_game", { roomCode: roomData.roomCode });
+  };
 
   const moveForward = () => {
-    if (!roomData || !socket || !playerName) return;
-
-    if (!gameStarted) setGameStarted(true);
+    if (!roomData || !socket || !playerName || !gameStarted) return;
 
     const currentPos = playersPositions[playerName] || 0;
     const newPos = Math.min(currentPos + 5, 100);
@@ -91,6 +134,10 @@ export const RunnerGame: React.FC = () => {
     );
   }
 
+  const showStartButton = isHost && !gameStarted && !isCounting && !winner;
+  const showRaceButton = gameStarted && !isCounting && !winner;
+  const showWaitingText = !isHost && !gameStarted && !isCounting && !winner;
+
   return (
     <div className="min-h-screen p-8 bg-blue-200 flex flex-col items-center">
       <IconBackground />
@@ -112,7 +159,9 @@ export const RunnerGame: React.FC = () => {
           </div>
           <div className="text-4xl font-bold mb-4">
             🎉 {winner} 🎉
-            <h1>Чи ч хурдан 🐌 юм даа!</h1>
+            <h1 className="text-xl  text-blue-700 font-bold">
+              🐌 Тооцооноос зугтааж чадлаа 🫵🏻
+            </h1>
           </div>
         </div>
       ) : (
@@ -154,12 +203,32 @@ export const RunnerGame: React.FC = () => {
           })}
 
           <div className="fixed bottom-0 left-0 right-0 z-50 p-16 flex justify-center">
-            <button
-              onClick={moveForward}
-              className="mt-6 bg-blue-400 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl items-center"
-            >
-              🐌 Гүйгээд урагшаа
-            </button>
+            {isCounting && (
+              <div className="text-9xl text-gray-800 font-bold animate-bounce transition-all duration-300">
+                {countdown > 0 ? countdown : "Эхэллээ!"}
+              </div>
+            )}
+            {showStartButton && (
+              <button
+                onClick={startGame}
+                className="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl items-center"
+              >
+                Тоглоомыг эхлүүлэх
+              </button>
+            )}
+            {showRaceButton && (
+              <button
+                onClick={moveForward}
+                className="mt-6 bg-blue-400 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl items-center"
+              >
+                🐌 Гүйгээд урагшаа
+              </button>
+            )}
+            {showWaitingText && (
+              <div className="text-center text-lg font-bold text-gray-600">
+                Боссыг тоглоомыг эхлүүлэхийг хүлээнэ үү
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -5,7 +5,7 @@ import { Suspense, useContext, useState } from "react";
 import { ExcuseBackground } from "./components/ExcuseBackground";
 import { ExcuseHeader } from "./components/ExcuseHeader";
 import { ExcuseForm } from "./components/ExcuseForm";
-import { AnimatedDotAll } from "@/components/AnimatedDot";
+
 import { RoomContext } from "@/context/roomContextTest";
 import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Loading Dots In Yellow.json";
@@ -56,9 +56,10 @@ const ExcuseSection: React.FC = () => {
         </div>
         <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-xs sm:max-w-md w-full border border-violet-300">
           <ExcuseHeader />
-          <h2 className="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6 text-purple-700 drop-shadow-sm">
-            Шалтаг аа бич📝 {playerName}
-          </h2>
+          <div className="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6 text-purple-700 drop-shadow-sm">
+            Шалтаг аа бич📝
+            <h2>🌚{playerName}🌚</h2>
+          </div>
 
           {submitted ? (
             <div className="text-center py-6 sm:py-8">
@@ -71,7 +72,6 @@ const ExcuseSection: React.FC = () => {
             <ExcuseForm onSuccess={() => setSubmitted(true)} />
           )}
           <div className="flex justify-between px-6"></div>
-          <AnimatedDotAll />
         </div>
       </div>
     </Suspense>

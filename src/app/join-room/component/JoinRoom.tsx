@@ -19,7 +19,7 @@ export default function JoinRoom() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    socket = io("http://who-pays-backend.vercel.app");
+    socket = io("http://localhost:4200");
     socket.on("roomData", (data: { roomCode: string }) => {
       setIsConnecting(false);
       window.location.href = `/lobby?roomCode=${data.roomCode}&playerName=${nickname}`;

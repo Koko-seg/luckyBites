@@ -13,21 +13,22 @@ export const RoomInfoCard = () => {
   return (
     <div className="max-w-4xl mx-auto mb-8">
       <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-purple-100 text-center">
-        <div className="flex items-center gap-2 text-center justify-center">
+        {/* Өөрчлөлт: Бүх мэдээллийг нэг div дотор нэгтгэлээ */}
+        <div className="text-center">
           <h2 className="text-1xl font-black text-purple-700 mb-2">
             Өрөөний код:
+            <span className="px-3 py-1 text-purple-900 font-mono text-lg font-bold">
+              {roomData.roomCode}
+            </span>
           </h2>
-          <h2 className="px-3 py-1 text-purple-900 font-mono text-lg font-bold">
-            {roomData.roomCode}
-          </h2>
-        </div>
-        <div className="flex items-center justify-center gap-4 text-purple-600">
-          <h1 className="text-1xl font-black text-purple-600 mb-2">
-            Өрөөний нэр:
-          </h1>
-          <span className="text-1xl font-black text-yellow-400 mb-2">
-            {roomData.roomName}
-          </span>
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="text-1xl font-black text-purple-600">
+              Өрөөний нэр:
+            </h1>
+            <span className="text-1xl font-black text-yellow-400">
+              {roomData.roomName}
+            </span>
+          </div>
         </div>
       </div>
     </div>

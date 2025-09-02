@@ -30,6 +30,11 @@ const Page = () => {
       <WhiteDot />
 
       <Header />
+      <div className="w-full text-gray-500 py-6 px-4 text-center ">
+        <p className="text-lg md:text-xl font-semibold">
+          Та төлбөр төлөхгүйгээр энд азаа сорих боломжтой!
+        </p>
+      </div>
       <div className="flex space-x-4 mb-8">
         <div className="space-y-4 sm:space-y-6">
           <ActionButton

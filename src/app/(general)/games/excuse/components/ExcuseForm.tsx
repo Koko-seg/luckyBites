@@ -63,7 +63,7 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
           className="w-full p-3 border rounded-xl resize-none h-24"
-          placeholder="Шалтгаанаа бич..."
+          placeholder="Шалтгаанаа кирилээр бичвэл илүү гоё шүү..."
           value={reason}
           onChange={handleChange}
           disabled={timer === 0}
@@ -83,11 +83,12 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = () => {
 
       {allReasons.length > 0 && (
         <div className="mt-4">
-          <h3 className="font-bold">Илгээсэн шалтгаанууд:</h3>
+          <h3 className="font-bold ">Илгээсэн шалтгаанууд:</h3>
           <ul className="list-disc list-inside">
             {allReasons.map((p, idx) => (
               <li key={idx}>
-                <span className="font-semibold">{}</span> {p.reason}
+                <span className="font-semibold text-violet-600">{}</span>{" "}
+                {p.reason}
               </li>
             ))}
           </ul>
@@ -96,9 +97,8 @@ export const ExcuseForm: React.FC<ExcuseFormProps> = () => {
 
       {roast && (
         <div className="mt-4 bg-yellow-50 p-4 rounded-xl border border-yellow-300">
-          <h3 className="font-bold mb-2">🤖 AI Roast:</h3>
-          <p>{roast}</p>
-          {/* {chosen && <p className="mt-2 text-sm text-gray-600">👉 Сонгогдсон шалтгаан: {chosen}</p>}     */}
+          <h3 className="font-bold mb-2">🤖 AI Рөүст:</h3>
+          <p className="mt-2 text-sm text-violet-700">{roast}</p>
         </div>
       )}
     </div>

@@ -31,10 +31,6 @@ export const PlayerCardGeneral = () => {
 
   const isHost = (name: string) => roomData?.host === name;
 
-  const handleRemovePlayer = () => {
-    if (!isCurrentUserHost) return;
-  };
-
   return (
     <div className="max-w-full mx-auto mb-4 p-4">
       <h2 className="text-base font-bold text-purple-700 mb-4 text-center flex items-center justify-center gap-2">
@@ -49,7 +45,6 @@ export const PlayerCardGeneral = () => {
             isCurrentUser={player.name === currentUserNickname}
             isHost={isHost(player.name)}
             isCurrentUserHost={isCurrentUserHost}
-            onRemove={handleRemovePlayer}
           />
         ))}
 
