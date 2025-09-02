@@ -3,9 +3,7 @@
 import JoinRoom from "./component/JoinRoom";
 
 const Page = () => {
-    return (
-        <JoinRoom />
-)
+  return <JoinRoom />;
 };
 
 export default Page;

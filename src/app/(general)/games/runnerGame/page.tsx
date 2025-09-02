@@ -5,8 +5,8 @@ import RunnerGame from "./components/RunnerGame";
 
 export default function RunnerGamePage() {
   return (
-    <Suspense>
-      <RunnerGame />
+    <Suspense fallback={<div>Loading...</div>}>
+      <RunnerGame />;
     </Suspense>
   );
 }

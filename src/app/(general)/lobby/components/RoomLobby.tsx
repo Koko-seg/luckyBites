@@ -1,13 +1,11 @@
 import { LogOut } from "lucide-react";
 
 import { useContext } from "react";
-
 import { PlayerCardGeneral } from "./PlayerCardGeneral";
 import { RoomInfoCard } from "./RoomInfoCard";
 import { RoomContext } from "@/context/roomContextTest";
-import ExcuseCard from "@/app/(lobby)/games/excuse/components/ExcuseCard";
+import ExcuseCard from "@/app/(general)/games/excuse/components/ExcuseCard";
 import { GameButton } from "./GameButton";
-import RaceGame from "@/app/(lobby)/games/runnerGame/page";
 import SpinWheelPage from "../../games/spin/page";
 import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Loading Dots In Yellow.json";

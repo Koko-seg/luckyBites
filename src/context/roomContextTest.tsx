@@ -62,7 +62,9 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const handleJoinError = (payload: { message: string | object }) => {
       const { message } = payload;
-      setErrorMessage(typeof message === "object" ? JSON.stringify(message) : message);
+      setErrorMessage(
+        typeof message === "object" ? JSON.stringify(message) : message
+      );
       setLoading(false);
     };
 
@@ -85,8 +87,7 @@ export const RoomProvider: React.FC<{ children: React.ReactNode }> = ({
       </div>
     );
 
-  if (errorMessage)
-    return <div>Алдаа гарлаа: {errorMessage}</div>;
+  if (errorMessage) return <div>Алдаа гарлаа: {errorMessage}</div>;
 
   return (
     <RoomContext.Provider

@@ -7,49 +7,9 @@ import { useRouter } from "next/navigation";
 import { ExcuseBackground } from "@/components/excuseBackground";
 import { IconBackground } from "@/components/IconBackground";
 import { SquareArrowLeft } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function Card({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={`rounded-xl shadow-md bg-white p-6 ${className}`}>
-      {children}
-    </div>
-  );
-}
-export function CardHeader({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <div className={`mb-4 ${className}`}>{children}</div>;
-}
-export function CardTitle({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <h2 className={`text-2xl font-semibold ${className}`}>{children}</h2>;
-}
-export function CardContent({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <div className={`${className}`}>{children}</div>;
-}
-
-export default function SpinWheelPage() {
+export function SpinWheelPage() {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [winner, setWinner] = useState<string | null>(null);

@@ -1,4 +1,5 @@
 import { RoomProvider } from "@/context/roomContextTest";
+import { Suspense } from "react";
 
 export default function LobbyLayout({
   children,
@@ -6,8 +7,8 @@ export default function LobbyLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>
+    <Suspense fallback={<div>Loading...</div>}>
       <RoomProvider>{children}</RoomProvider>
-    </div>
+    </Suspense>
   );
 }

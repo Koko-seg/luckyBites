@@ -1,3 +1,5 @@
+"use client";
+
 import { Users } from "lucide-react";
 import { PlayerCard } from "./PlayerCard";
 import { useSearchParams } from "next/navigation";

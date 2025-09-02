@@ -26,7 +26,6 @@ export const GameButton: React.FC<GameButtonProps> = ({
 }) => {
   const data = useContext(RoomContext);
 
-
   if (!data?.roomData || !data.playerName || !data.socket) return null;
 
   const { roomData, playerName, socket } = data;
@@ -72,8 +71,9 @@ export const GameButton: React.FC<GameButtonProps> = ({
     <div className="">
       <button
         onClick={handleGameSelect}
-        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${!canStart ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
+          !canStart ? "opacity-50 cursor-not-allowed" : ""
+        }`}
       >
         <div className="flex items-center text-center">
           <div>
@@ -83,7 +83,6 @@ export const GameButton: React.FC<GameButtonProps> = ({
           <div className="mb-4 p-4 bg-white/30 rounded-2xl group-hover:bg-white/40 transition-colors">
             <IconComponent size={48} className="mx-auto" />
           </div>
-
         </div>
         {isSelected && (
           <div className="mt-2 text-sm font-bold bg-white/50 px-3 py-1 rounded-full">
@@ -91,16 +90,6 @@ export const GameButton: React.FC<GameButtonProps> = ({
           </div>
         )}
       </button>
-
-      {/* Game эхлүүлэх товч зөвхөн сонгогдсон game-д */}
-      {/* {isSelected && canStart && (
-        <button
-          onClick={handleGameStart}
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-200"
-        >
-          🚀 ТОГЛООМ ЭХЛҮҮЛЭХ
-        </button> */}
-      {/* )} */}
     </div>
   );
 };
