@@ -114,7 +114,9 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
         >
           {isLoading ? "Үүсгэж байна..." : "Өрөө Үүсгэх"}
         </button>
-
+        <div className="text-center mt-4 text-purple-500 font-medium">
+          Жич: өрөөнд нийт 10 хүн л байна шүү ✌🏻
+        </div>
         {errorMessage && (
           <div
             className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mt-4"

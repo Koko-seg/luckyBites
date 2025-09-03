@@ -105,6 +105,9 @@ export default function JoinRoom() {
         >
           {isConnecting ? "Холболт үүсгэж байна..." : "Өрөөнд нэвтрэх"}
         </button>
+        <div className="text-center mt-4 text-purple-500 font-medium">
+          Жич:Адилхан нэртэй хүмүүс байвал нэг нь нэрнээсээ татгалзждээ 😬
+        </div>
 
         {errorMessage && (
           <div

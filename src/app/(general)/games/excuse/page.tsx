@@ -44,7 +44,7 @@ const ExcuseSection: React.FC = () => {
       <div className="min-h-screen p-8 bg-violet-200 flex flex-col items-center">
         <ExcuseBackground />
         <IconBackground />
-        <div className="flex justify-between w-full max-w-lg mb-6">
+        <div className="flex justify-between w-full max-w-xs sm:max-w-md mb-6">
           <div className="relative p-[2px] rounded-md bg-gradient-to-br from-orange-400 via-blue-400 to-violet-400">
             <button
               className="bg-violet-300 hover:bg-violet-400 px-4 py-2 rounded-md text-white flex items-center justify-center relative z-10"

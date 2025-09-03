@@ -157,9 +157,9 @@ const RunnerGame: React.FC = () => {
           <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
             <Lottie animationData={globeAnimation} loop={true} />
           </div>
-          <div className="text-4xl font-bold mb-4">
+          <div className="text-4xl font-bold mb-4 text-blue-800">
             🎉 {winner} 🎉
-            <h1 className="text-xl  text-blue-700 font-bold">
+            <h1 className="text-xl  text-blue-600 font-bold">
               🐌 Тооцооноос зугтааж чадлаа 🫵🏻
             </h1>
           </div>
