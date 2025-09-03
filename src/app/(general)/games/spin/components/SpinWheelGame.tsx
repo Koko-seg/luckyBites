@@ -35,6 +35,9 @@ export function SpinWheelPage() {
     ],
     []
   );
+  // Дугуйн радиусыг динамикаар авах
+  const wheelRadius = 144; // (72*2 / 2) = 144px, w-72/h-72 үед
+  const textRadius = wheelRadius * 0.6; // текстийг 75% радиуст байрлуулна
 
   const WHEEL_SEGMENTS = useMemo(() => {
     if (!roomData?.players) return [];
@@ -111,7 +114,7 @@ export function SpinWheelPage() {
       <ExcuseBackground />
       <IconBackground />
 
-      <div className="flex justify-between w-full max-w-lg mb-6">
+      <div className="flex justify-between w-full max-w-md sm:max-w-2xl mb-6">
         <div className="relative p-[2px] rounded-md bg-gradient-to-br from-orange-400 via-blue-400 to-violet-400">
           <button
             className="bg-orange-300 hover:bg-orange-400 px-4 py-2 rounded-md text-white flex items-center justify-center relative z-10"
@@ -152,27 +155,30 @@ export function SpinWheelPage() {
               {WHEEL_SEGMENTS.map((segment, index) => {
                 const segmentAngle = 360 / WHEEL_SEGMENTS.length;
                 const offsetAngle = index * segmentAngle;
-                const textRotation = offsetAngle + segmentAngle / 2;
+                const textRotation = offsetAngle + segmentAngle / 2; // Center of the segment
+
                 return (
                   <div
                     key={index}
-                    className="absolute font-bold text-sm sm:text-lg z-10"
+                    className="absolute w-full h-full"
                     style={{
-                      left: "50%",
-                      top: "50%",
-                      transform: `rotate(${textRotation}deg) translateY(-100px) translateX(-50%)`,
+                      transform: `rotate(${textRotation}deg)`,
                       transformOrigin: "center",
-                      color: segment.textColor,
                     }}
                   >
-                    <span
+                    <div
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                       style={{
-                        transform: `rotate(-${textRotation}deg)`,
+                        transform: `translateY(-${textRadius}px) rotate(90deg)`,
+                        color: segment.textColor,
                         textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                        whiteSpace: "nowrap",
+                        width: "100%", // Энэ нь текстний төвлөрөлтөд тусална
+                        textAlign: "center",
                       }}
                     >
                       {segment.text}
-                    </span>
+                    </div>
                   </div>
                 );
               })}

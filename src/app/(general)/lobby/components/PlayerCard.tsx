@@ -40,7 +40,9 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
         </div>
       </div>
 
-      <p className="font-bold text-purple-800 text-lg">{player.name}</p>
+      <p className="font-bold text-purple-800 text-lg break-words">
+        {player.name}
+      </p>
 
       <div className="flex flex-col gap-1 mt-2">
         {isHost && (

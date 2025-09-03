@@ -47,7 +47,7 @@ export const RoomLobby = () => {
       name: "Азаа үзэх үү?",
       component: SpinWheelPage,
       description: "Өнөөдөр азтай өдөр чинь байх болов уу даа.",
-      icon: "/spin.png",
+      icon: "/lottery.png",
       color: "bg-orange-500",
       textColor: "text-white",
     },
@@ -86,7 +86,7 @@ export const RoomLobby = () => {
   };
   return (
     <div className="min-h-screen bg-white p-2 flex flex-col items-center">
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm flex-grow overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-1"></div>
         </div>
@@ -102,14 +102,16 @@ export const RoomLobby = () => {
 
           <PlayerCardGeneral />
         </div>
-        {games.map((game) => (
-          <GameButton
-            key={game.id}
-            game={game}
-            canStart={canStart}
-            selectedGame={selectedGame}
-          />
-        ))}
+        <div className="flex flex-col space-y-4">
+          {games.map((game) => (
+            <GameButton
+              key={game.id}
+              game={game}
+              canStart={canStart}
+              selectedGame={selectedGame}
+            />
+          ))}
+        </div>
         <div className="w-full mt-8 flex">
           <button
             onClick={handleLeaveRoom}
