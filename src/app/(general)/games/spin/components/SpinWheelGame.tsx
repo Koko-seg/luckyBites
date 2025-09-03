@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { useContext, useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RoomContext } from "@/context/roomContextTest";
@@ -10,6 +11,7 @@ import { SquareArrowLeft } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Confetti.json";
+import { motion, Variants } from "framer-motion";
 
 export function SpinWheelPage() {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -35,9 +37,9 @@ export function SpinWheelPage() {
     ],
     []
   );
-  // Дугуйн радиусыг динамикаар авах
-  const wheelRadius = 144; // (72*2 / 2) = 144px, w-72/h-72 үед
-  const textRadius = wheelRadius * 0.6; // текстийг 75% радиуст байрлуулна
+
+  const wheelRadius = 144;
+  const textRadius = wheelRadius * 0.6;
 
   const WHEEL_SEGMENTS = useMemo(() => {
     if (!roomData?.players) return [];
@@ -48,7 +50,6 @@ export function SpinWheelPage() {
     }));
   }, [roomData?.players, WHEEL_COLORS]);
 
-  // --- Socket listener ---
   useEffect(() => {
     if (!socket) return;
 
@@ -60,6 +61,7 @@ export function SpinWheelPage() {
       winner: string;
     }) => {
       setRotation(rotation);
+
       setTimeout(() => {
         setWinner(winner);
         setIsSpinning(false);
@@ -72,7 +74,6 @@ export function SpinWheelPage() {
     };
   }, [socket]);
 
-  // --- Early loading state ---
   if (!socket || !roomData || !playerName) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -104,28 +105,34 @@ export function SpinWheelPage() {
   };
 
   const backLobby = () => {
+    if (!roomData || !playerName) return;
     router.push(
       `/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`
     );
   };
 
+  const winnerVariants: Variants = {
+    hidden: { y: "100%", opacity: 0, scale: 0.8 },
+    visible: {
+      y: "0%",
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+        delay: 0.5,
+      },
+    },
+    exit: { y: "100%", opacity: 0, scale: 0.8 },
+  };
+
   return (
-    <div className="min-h-screen p-8 bg-orange-200 flex flex-col items-center">
+    <div className="min-h-screen p-8 bg-orange-200 flex flex-col items-center relative overflow-hidden">
       <ExcuseBackground />
       <IconBackground />
 
-      <div className="flex justify-between w-full max-w-md sm:max-w-2xl mb-6">
-        <div className="relative p-[2px] rounded-md bg-gradient-to-br from-orange-400 via-blue-400 to-violet-400">
-          <button
-            className="bg-orange-300 hover:bg-orange-400 px-4 py-2 rounded-md text-white flex items-center justify-center relative z-10"
-            onClick={backLobby}
-          >
-            <SquareArrowLeft />
-          </button>
-        </div>
-      </div>
-
-      <Card className="w-full max-w-md sm:max-w-2xl shadow-2xl border-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
+      <Card className="w-full max-w-md sm:max-w-2xl shadow-2xl border-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm relative z-10">
         <CardHeader className="text-center pb-4">
           <CardTitle className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-500 bg-clip-text text-transparent">
             Хэний данс өнөөдөр амрах вэ?
@@ -155,7 +162,7 @@ export function SpinWheelPage() {
               {WHEEL_SEGMENTS.map((segment, index) => {
                 const segmentAngle = 360 / WHEEL_SEGMENTS.length;
                 const offsetAngle = index * segmentAngle;
-                const textRotation = offsetAngle + segmentAngle / 2; // Center of the segment
+                const textRotation = offsetAngle + segmentAngle / 2;
 
                 return (
                   <div
@@ -173,7 +180,7 @@ export function SpinWheelPage() {
                         color: segment.textColor,
                         textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
                         whiteSpace: "nowrap",
-                        width: "100%", // Энэ нь текстний төвлөрөлтөд тусална
+                        width: "100%",
                         textAlign: "center",
                       }}
                     >
@@ -189,17 +196,18 @@ export function SpinWheelPage() {
             </div>
           </div>
 
-          {/* Spin Button */}
           <Button
             onClick={spinWheel}
             disabled={isSpinning || !isHost}
             size="lg"
-            className={`px-6 py-3 text-lg sm:px-12 sm:py-4 sm:text-xl font-bold shadow-lg transform transition-all duration-200 animate-pulse
+            className={`px-6 py-3 text-lg sm:px-12 sm:py-4 sm:text-xl font-bold shadow-lg transform transition-all duration-200
               ${
                 isHost
                   ? "bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 hover:scale-105"
                   : "bg-gray-400 cursor-not-allowed"
-              }`}
+              }
+              ${isSpinning && isHost ? "animate-pulse" : ""}
+            `}
           >
             {isHost
               ? isSpinning
@@ -207,28 +215,49 @@ export function SpinWheelPage() {
                 : "🎲 Эргүүлнэ үү!"
               : "👑 Босс чинь л эргүүлнэ дээ"}
           </Button>
-
-          {/* Winner */}
-          {!isSpinning && winner && (
-            <div className="text-center p-8 bg-gradient-to-r from-orange-50 to-indigo-50 dark:from-orange-900/20 dark:to-indigo-900/20 rounded-2xl border-2 border-orange-200 dark:border-orange-700 shadow-lg">
-              <div className="text-6xl mb-4">
-                🎉
-                <Lottie
-                  animationData={globeAnimation}
-                  loop={true}
-                  className="absolute inset-0 text-purple-500"
-                />
-              </div>
-              <h2 className="text-2xl font-bold text-orange-700 dark:text-orange-300 mb-2">
-                Азтай золиг вэ чи!
-              </h2>
-              <div className="text-xl font-bold text-yellow-500 dark:text-yellow-300 bg-white dark:bg-slate-800 px-6 py-3 rounded-full shadow-md">
-                🎉 {winner} 🎉
-              </div>
-            </div>
-          )}
         </CardContent>
       </Card>
+
+      {winner && (
+        <motion.div
+          className="absolute inset-0 flex flex-col items-center justify-center z-50 p-4"
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          variants={winnerVariants}
+          style={{ backdropFilter: "blur(8px)" }}
+        >
+          <div className="flex items-center gap-2 w-full max-w-xs sm:max-w-md mb-6 relative z-50">
+            <div className="relative p-[2px] rounded-md bg-gradient-to-br from-orange-400 via-blue-400 to-violet-400">
+              <button
+                className="bg-orange-300 hover:bg-orange-400 px-4 py-2 rounded-md text-white flex items-center justify-center relative z-10"
+                onClick={backLobby}
+              >
+                <SquareArrowLeft />
+              </button>
+            </div>
+            <span className="text-sm text-orange-800">
+              Дууссан бол энд дарна уу
+            </span>
+          </div>
+
+          <Lottie
+            animationData={globeAnimation}
+            loop={true}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
+          <div className="relative z-10 text-center p-8 bg-gradient-to-r from-orange-50 to-indigo-50 dark:from-orange-900/20 dark:to-indigo-900/20 rounded-2xl border-2 border-orange-200 dark:border-orange-700 shadow-lg max-w-md w-full">
+            <div className="text-6xl mb-4">🎉</div>
+            <h2 className="text-2xl font-bold text-orange-700 dark:text-orange-300 mb-2">
+              Азтай золиг вэ чи!
+            </h2>
+            <div className="text-xl font-bold text-yellow-500 dark:text-yellow-300 bg-white dark:bg-slate-800 px-6 py-3 rounded-full shadow-md">
+              🎉 {winner} 🎉
+            </div>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

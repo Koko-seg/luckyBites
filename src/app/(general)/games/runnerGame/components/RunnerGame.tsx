@@ -141,7 +141,8 @@ const RunnerGame: React.FC = () => {
   return (
     <div className="min-h-screen p-8 bg-blue-200 flex flex-col items-center">
       <IconBackground />
-      <div className="flex justify-between w-full max-w-lg mb-6">
+
+      <div className="flex items-center gap-2 w-full max-w-xs sm:max-w-md mb-6">
         <div className="relative p-[2px] rounded-md bg-gradient-to-br from-blue-400 via-blue-400 to-violet-400">
           <button
             className="bg-blue-300 hover:bg-blue-400 px-4 py-2 rounded-md text-white flex items-center justify-center relative z-10"
@@ -150,6 +151,7 @@ const RunnerGame: React.FC = () => {
             <SquareArrowLeft />
           </button>
         </div>
+        <span className="text-sm text-blue-800">Дууссан бол энд дарна уу</span>
       </div>
 
       {winner ? (
