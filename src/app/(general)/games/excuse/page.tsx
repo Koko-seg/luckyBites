@@ -44,7 +44,7 @@ const ExcuseSection: React.FC = () => {
       <div className="min-h-screen p-8 bg-violet-200 flex flex-col items-center">
         <ExcuseBackground />
         <IconBackground />
-        <div className="flex justify-between w-full max-w-xs sm:max-w-md mb-6">
+        <div className="flex items-center gap-2 w-full max-w-xs sm:max-w-md mb-6">
           <div className="relative p-[2px] rounded-md bg-gradient-to-br from-orange-400 via-blue-400 to-violet-400">
             <button
               className="bg-violet-300 hover:bg-violet-400 px-4 py-2 rounded-md text-white flex items-center justify-center relative z-10"
@@ -53,6 +53,9 @@ const ExcuseSection: React.FC = () => {
               <SquareArrowLeft />
             </button>
           </div>
+          <span className="text-sm text-violet-800">
+            Дууссан бол энд дарна уу
+          </span>
         </div>
         <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-xs sm:max-w-md w-full border border-violet-300">
           <ExcuseHeader />
