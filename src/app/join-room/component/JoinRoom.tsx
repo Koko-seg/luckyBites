@@ -18,8 +18,12 @@ export default function JoinRoom() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const socketUrl =
+    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4200";
   useEffect(() => {
-    socket = io("http://localhost:4200");
+    socket = io(socketUrl, {
+      transports: ["websocket"],
+    });
     socket.on("roomData", (data: { roomCode: string }) => {
       setIsConnecting(false);
       window.location.href = `/lobby?roomCode=${data.roomCode}&playerName=${nickname}`;
@@ -39,7 +43,7 @@ export default function JoinRoom() {
     return () => {
       if (socket) socket.disconnect();
     };
-  }, [nickname]);
+  }, [nickname, socketUrl]);
 
   const handleJoinRoom = () => {
     if (!roomCode || !nickname) {

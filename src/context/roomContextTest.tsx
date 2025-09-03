@@ -105,8 +105,10 @@ export const useRoom = () => useContext(RoomContext);
 let socket: Socket | null = null;
 
 export const getRoomSocket = (): Socket => {
+  const socketUrl =
+    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4200";
   if (!socket) {
-    socket = io("http://localhost:4200", {
+    socket = io(socketUrl, {
       transports: ["websocket"],
     });
 

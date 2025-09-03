@@ -25,9 +25,10 @@ export default function CreateRoom({ onRoomCreated }: CreateRoomFormProps) {
     e.preventDefault();
     setIsLoading(true);
     setErrorMessage("");
+    const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     try {
-      const response = await fetch("http://localhost:4200/room", {
+      const response = await fetch(`${BACKEND_URL}/room`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ roomName, hostNickname }),
