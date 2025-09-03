@@ -38,21 +38,20 @@ const GameIcon = ({
     size: number;
     className?: string;
   }>;
-  return (
-    <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center p-2 bg-white/30 rounded-2xl group-hover:bg-white/40 transition-colors">
-      {isImage ? (
-        <Image
-          src={icon as string | StaticImport}
-          alt={name}
-          width={48}
-          height={48}
-          className="w-full h-full object-contain"
-        />
-      ) : (
-        <IconComponent size={48} className="w-full h-full" />
-      )}
-    </div>
-  );
+
+  if (isImage) {
+    return (
+      <Image
+        src={icon as string | StaticImport}
+        alt={name}
+        width={48}
+        height={48}
+        className="mx-auto"
+      />
+    );
+  } else {
+    return <IconComponent size={48} className="mx-auto" />;
+  }
 };
 
 export const GameButton: React.FC<GameButtonProps> = ({
@@ -80,12 +79,14 @@ export const GameButton: React.FC<GameButtonProps> = ({
     : `${game.color} ${game.textColor}`;
 
   const content = (
-    <div className="flex items-start text-center gap-4">
-      <div className="flex-1 text-left">
+    <div className="flex items-center text-center">
+      <div>
         <h3 className="text-2xl font-black mb-2">{game.name}</h3>
         <p className="text-lg font-medium opacity-90">{game.description}</p>
       </div>
-      <GameIcon icon={game.icon} name={game.name} />
+      <div className="mb-4 p-4 bg-white/30 rounded-2xl group-hover:bg-white/40 transition-colors">
+        <GameIcon icon={game.icon} name={game.name} />
+      </div>
     </div>
   );
 
@@ -105,10 +106,10 @@ export const GameButton: React.FC<GameButtonProps> = ({
   }
 
   return (
-    <div className="w-full">
+    <div className="">
       <button
         onClick={handleGameSelect}
-        className={`${buttonClasses}  w-full p-6 rounded-3xl shadow-xl border-b-4 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
+        className={`${buttonClasses} p-6 rounded-3xl shadow-xl border-b-4 transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
           !canStart ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >

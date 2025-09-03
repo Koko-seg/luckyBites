@@ -1,6 +1,7 @@
+import { motion, useInView, useAnimation } from "framer-motion";
+import { useEffect, useRef, useContext } from "react";
 import { LogOut } from "lucide-react";
 
-import { useContext } from "react";
 import { PlayerCardGeneral } from "./PlayerCardGeneral";
 import { RoomInfoCard } from "./RoomInfoCard";
 import { RoomContext } from "@/context/roomContextTest";
@@ -14,11 +15,20 @@ import RunnerGame from "../../games/runnerGame/components/RunnerGame";
 import { useRouter } from "next/navigation";
 
 export const RoomLobby = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { amount: 0.1 });
+  const controls = useAnimation();
   const data = useContext(RoomContext);
-  // const { roomData } = data || {};
   const { roomData, socket, playerName } = data || {};
-
   const router = useRouter();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
+    }
+  }, [isInView, controls]);
 
   if (!roomData) {
     return (
@@ -47,7 +57,7 @@ export const RoomLobby = () => {
       name: "Азаа үзэх үү?",
       component: SpinWheelPage,
       description: "Өнөөдөр азтай өдөр чинь байх болов уу даа.",
-      icon: "/lottery.png",
+      icon: "/spin.png",
       color: "bg-orange-500",
       textColor: "text-white",
     },
@@ -81,12 +91,34 @@ export const RoomLobby = () => {
         roomCode: roomData.roomCode,
         playerName: playerName,
       });
-      router.push("/"); // Хэрэглэгчийг үндсэн хуудас руу шилжүүлнэ
+      router.push("/");
     }
   };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen bg-white p-2 flex flex-col items-center">
-      <div className="w-full max-w-sm flex-grow overflow-y-auto">
+      <div className="w-full max-w-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-1"></div>
         </div>
@@ -102,16 +134,25 @@ export const RoomLobby = () => {
 
           <PlayerCardGeneral />
         </div>
-        <div className="flex flex-col space-y-4">
+
+        <motion.div
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+          className="w-full"
+        >
           {games.map((game) => (
-            <GameButton
-              key={game.id}
-              game={game}
-              canStart={canStart}
-              selectedGame={selectedGame}
-            />
+            <motion.div key={game.id} variants={itemVariants} className="mb-4">
+              <GameButton
+                game={game}
+                canStart={canStart}
+                selectedGame={selectedGame}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
+
         <div className="w-full mt-8 flex">
           <button
             onClick={handleLeaveRoom}
