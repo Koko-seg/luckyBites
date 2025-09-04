@@ -60,7 +60,7 @@ const ExcuseSection: React.FC = () => {
         <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-xs sm:max-w-md w-full border border-violet-300">
           <ExcuseHeader />
           <div className="text-lg sm:text-xl font-bold text-center mb-4 sm:mb-6 text-purple-700 drop-shadow-sm">
-            Шалтаг аа бич📝
+            Тооцооноос мултрах шалтаг аа бич📝
             <h2>🌚{playerName}🌚</h2>
           </div>
 

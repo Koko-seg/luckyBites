@@ -65,7 +65,7 @@ export const RoomLobby = () => {
       id: "runnerGame",
       name: "Уралдах уу?",
       component: RunnerGame,
-      description: "Гэхдээ ухаанаараа биш шүү.",
+      description: "Гэхдээ ухаанаараа биш шүү хэхэ",
       icon: "/snail.png",
       color: "bg-blue-500",
       textColor: "text-white",

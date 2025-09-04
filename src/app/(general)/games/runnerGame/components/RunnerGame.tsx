@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Lottie from "lottie-react";
 import globeAnimation from "@/animation/Confetti.json";
+import { motion, Variants } from "framer-motion";
 
 const RunnerGame: React.FC = () => {
   const router = useRouter();
@@ -123,6 +124,21 @@ const RunnerGame: React.FC = () => {
       `/lobby?roomCode=${roomData.roomCode}&playerName=${playerName}`
     );
   };
+  const winnerVariants: Variants = {
+    hidden: { y: "100%", opacity: 0, scale: 0.8 },
+    visible: {
+      y: "0%",
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+        delay: 0.5,
+      },
+    },
+    exit: { y: "100%", opacity: 0, scale: 0.8 },
+  };
 
   if (!socket || !roomData || !playerName) {
     return (
@@ -155,17 +171,44 @@ const RunnerGame: React.FC = () => {
       </div>
 
       {winner ? (
-        <div className="text-center p-8 bg-blue-400 rounded-xl shadow-lg ">
-          <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
-            <Lottie animationData={globeAnimation} loop={true} />
+        <motion.div
+          className="absolute inset-0 flex flex-col items-center justify-center z-50 p-4"
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          variants={winnerVariants}
+          style={{ backdropFilter: "blur(8px)" }}
+        >
+          <div className="flex items-center gap-2 w-full max-w-xs sm:max-w-md mb-6 relative z-50">
+            <div className="relative p-[2px] rounded-md bg-gradient-to-br from-blue-400 via-green-400 to-indigo-400">
+              <button
+                className="bg-blue-300 hover:bg-blue-400 px-4 py-2 rounded-md text-white flex items-center justify-center relative z-10"
+                onClick={backLobby}
+              >
+                <SquareArrowLeft />
+              </button>
+            </div>
+            <span className="text-sm text-blue-800">
+              Дууссан бол энд дарна уу
+            </span>
           </div>
-          <div className="text-4xl font-bold mb-4 text-blue-800">
-            🎉 {winner} 🎉
-            <h1 className="text-xl  text-blue-600 font-bold">
-              🐌 Тооцооноос зугтааж чадлаа 🫵🏻
-            </h1>
+
+          <Lottie
+            animationData={globeAnimation}
+            loop={true}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
+          <div className="relative z-10 text-center p-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border-2 border-blue-200 dark:border-blue-700 shadow-lg max-w-md w-full">
+            <div className="text-6xl mb-4">🐌</div>
+            <h2 className="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-2">
+              Тооцооноос зугтаж чадлаа!
+            </h2>
+            <div className="text-xl font-bold text-green-500 dark:text-green-300 bg-white dark:bg-slate-800 px-6 py-3 rounded-full shadow-md">
+              🎉 {winner} 🎉
+            </div>
           </div>
-        </div>
+        </motion.div>
       ) : (
         <div className="w-full max-w-lg space-y-4">
           {gameStarted && (
