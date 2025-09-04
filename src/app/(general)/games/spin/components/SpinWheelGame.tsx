@@ -88,7 +88,7 @@ export function SpinWheelPage() {
     setIsSpinning(true);
     setWinner(null);
 
-    const spins = Math.floor(Math.random() * 5) + 5;
+    const spins = Math.floor(Math.random() * 10) + 10;
     const finalAngle = Math.floor(Math.random() * 360);
     const totalRotation = rotation + spins * 360 + finalAngle;
 
@@ -150,7 +150,7 @@ export function SpinWheelPage() {
               className="relative w-72 h-72 sm:w-96 sm:h-96 rounded-full overflow-hidden transition-transform duration-[3000ms] ease-out shadow-2xl ring-8 ring-white dark:ring-slate-700"
               style={{
                 transform: `rotate(${rotation}deg)`,
-                transition: "transform 10s cubic-bezier(0, 1, 0.25, 1)",
+                transition: "transform 20s cubic-bezier(0, 1, 0, 1)",
                 background: `conic-gradient(${WHEEL_SEGMENTS.map(
                   (s, i) =>
                     `${s.color} ${i * (360 / WHEEL_SEGMENTS.length)}deg, ${

@@ -39,19 +39,21 @@ const GameIcon = ({
     className?: string;
   }>;
 
-  if (isImage) {
-    return (
-      <Image
-        src={icon as string | StaticImport}
-        alt={name}
-        width={48}
-        height={48}
-        className="mx-auto"
-      />
-    );
-  } else {
-    return <IconComponent size={48} className="mx-auto" />;
-  }
+  return (
+    <div className="flex-shrink-0 w-14 h-14 flex items-center justify-center p-2 rounded-2xl group-hover:bg-white/40 transition-colors">
+      {isImage ? (
+        <Image
+          src={icon as string | StaticImport}
+          alt={name}
+          width={48}
+          height={48}
+          className="w-full h-full object-contain"
+        />
+      ) : (
+        <IconComponent size={48} className="w-full h-full" />
+      )}
+    </div>
+  );
 };
 
 export const GameButton: React.FC<GameButtonProps> = ({
