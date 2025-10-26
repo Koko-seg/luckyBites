@@ -78,7 +78,7 @@ Sound Effects: Play sounds during wheel spins, AI selection, or Runner winner an
 
 **🔹 Technical Requirements**
 
-Frontend: HTML, CSS, JavaScript (React or Vue recommended)
+Frontend:JavaScript, React.js, Next.js
 
 Backend: Node.js + Express with real-time support
 
