@@ -114,7 +114,7 @@ export default function JoinRoom() {
             className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mt-4"
             role="alert"
           >
-            <strong className="font-bold">Алдаа гарлаа! </strong>
+            <strong className="font-bold">"Уучлаарай, free trial дууссан тул backend ашиглах боломжгүй байна." </strong>
             <span className="block sm:inline">{errorMessage}</span>
           </div>
         )}
